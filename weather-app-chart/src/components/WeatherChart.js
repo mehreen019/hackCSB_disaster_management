@@ -1,29 +1,8 @@
-// src/components/WeatherChart.js
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Line } from 'react-chartjs-2';
-import {
-    Chart as ChartJS,
-    LineElement,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    Tooltip,
-    Legend,
-    TimeScale
-} from 'chart.js';
-import 'chartjs-adapter-date-fns';
-
-ChartJS.register(
-    LineElement,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    Tooltip,
-    Legend,
-    TimeScale
-);
+import TemperatureChart from './TemperatureChart';
+import WindSpeedChart from './WindSpeedChart';
+import CloudCoverChart from './CloudCoverChart';
 
 const WeatherChart = ({ placeId }) => {
     const [weatherData, setWeatherData] = useState(null);
@@ -56,97 +35,25 @@ const WeatherChart = ({ placeId }) => {
 
     if (!weatherData) return <div>Loading...</div>;
 
-    const chartData = {
-        labels: weatherData.hourly.data.map(hour => new Date(hour.date)),
-        datasets: [
-            {
-                label: 'Temperature (°C)',
-                data: weatherData.hourly.data.map(hour => hour.temperature),
-                borderColor: 'rgba(75, 192, 192, 1)',
-                fill: false,
-                yAxisID: 'y-temperature',
-            },
-            {
-                label: 'Wind Speed (m/s)',
-                data: weatherData.hourly.data.map(hour => hour.wind.speed),
-                borderColor: 'rgba(192, 75, 75, 1)',
-                fill: false,
-                yAxisID: 'y-wind',
-            },
-            {
-                label: 'Cloud Cover (%)',
-                data: weatherData.hourly.data.map(hour => hour.cloud_cover.total),
-                borderColor: 'rgba(75, 75, 192, 1)',
-                fill: false,
-                yAxisID: 'y-cloud',
-            }
-        ],
-    };
+    const hourlyData = weatherData.hourly.data;
 
-    const options = {
-        scales: {
-            x: {
-                type: 'time',
-                time: {
-                    unit: 'hour',
-                },
-                title: {
-                    display: true,
-                    text: 'Time',
-                },
-            },
-            'y-temperature': {
-                type: 'linear',
-                position: 'left',
-                title: {
-                    display: true,
-                    text: 'Temperature (°C)',
-                },
-            },
-            'y-wind': {
-                type: 'linear',
-                position: 'right',
-                title: {
-                    display: true,
-                    text: 'Wind Speed (m/s)',
-                },
-                grid: {
-                    drawOnChartArea: false,
-                },
-            },
-            'y-cloud': {
-                type: 'linear',
-                position: 'right',
-                title: {
-                    display: true,
-                    text: 'Cloud Cover (%)',
-                },
-                grid: {
-                    drawOnChartArea: false,
-                },
-            }
-        },
-        plugins: {
-            legend: {
-                display: true,
-                position: 'top',
-            },
-            tooltip: {
-                mode: 'index',
-                intersect: false,
-            },
-        },
-        interaction: {
-            mode: 'nearest',
-            axis: 'x',
-            intersect: false,
-        }
+    const chartStyle = {
+        width: '600px',
+        height: '400px',
+        marginBottom: '20px'
     };
 
     return (
         <div>
-            <h2>Weather Data</h2>
-            <Line data={chartData} options={options} />
+            <div style={chartStyle}>
+                <TemperatureChart data={hourlyData} />
+            </div>
+            <div style={chartStyle}>
+                <WindSpeedChart data={hourlyData} />
+            </div>
+            <div style={chartStyle}>
+                <CloudCoverChart data={hourlyData} />
+            </div>
         </div>
     );
 };
