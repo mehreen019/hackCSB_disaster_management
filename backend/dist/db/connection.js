@@ -2,7 +2,7 @@ import { connect } from "mongoose";
 import { disconnect } from "mongoose";
 async function connectToDatabase() {
     try {
-        await connect(process.env.MONGODB_URL);
+        await connect("mongodb+srv://rakhi:1234@cluster0.lxebxw0.mongodb.net/hell?retryWrites=true&w=majority&appName=Cluster0");
     }
     catch (error) {
         throw new Error("Cannot connect to mongodb");

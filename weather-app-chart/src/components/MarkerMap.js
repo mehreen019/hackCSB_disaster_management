@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import {toast } from 'react-hot-toast';
 import { Loader } from "@googlemaps/js-api-loader"
 import useGoogleMaps from './hooks/useMap';
+import { storeShelterLocations, getShelterLocations } from '../helpers/api-comm';
 
 const mapContainerStyle = {
   width: '100vw',
@@ -36,6 +37,15 @@ const MapWithClickableCustomMarkers = () => {
     infoWindow.open(map);
   }
 
+  const handleSave = async()=>{
+    console.log("save func reached")
+    const wholeResponse = await storeShelterLocations(locationArray); 
+    console.log(wholeResponse)
+    toast.success(wholeResponse.message)
+  }
+
+  
+
   useEffect(() => {
     if (!isLoaded) return;
 
@@ -57,6 +67,7 @@ const MapWithClickableCustomMarkers = () => {
           
 
                 const place = results[0];
+
                 new window.google.maps.Marker({
                     position: place.geometry.location,
                     map: map,
@@ -64,7 +75,7 @@ const MapWithClickableCustomMarkers = () => {
                     title: place.name,
                 });
             
-                const newLocation = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
+                const newLocation = { name:place.name, lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
           
                 setLocationArray((prevArray) => {
                     const updatedArray = [...prevArray, newLocation];
@@ -113,16 +124,55 @@ const MapWithClickableCustomMarkers = () => {
     mapRef.current = map;
   }, [isLoaded]);
 
+  const handleGet = async () => {
+    console.log(locationArray);
+    console.log("get func reached");
+  
+    try {
+      const wholeResponse = await getShelterLocations(); 
+      console.log(wholeResponse);
+  
+      const newShelters = wholeResponse.shelters.map((shelter) => ({
+        name: shelter.name,
+        lat: parseFloat(shelter.lat),
+        lng: parseFloat(shelter.lng)
+      }));
+  
+      setLocationArray((prev) => [...prev, ...newShelters]);
+
+      if (mapRef.current) {
+        newShelters.forEach((place) => {
+          new window.google.maps.Marker({
+            position: { lat: place.lat, lng: place.lng },
+            map: mapRef.current,
+            icon: customIcon,
+            title: place.name,
+          });
+        });
+      }
+
+      console.log( "location array from handleget", locationArray)
+    } catch (error) {
+      console.error('Error fetching shelters:', error);
+    }
+  };
+
   return(
     <body>
         <div>
             <div id="map" style={mapContainerStyle}></div>;
         </div>
         <button type="button" onClick={() => {
-          console.log(locationArray);
+          handleGet()
         }
         }>
         Get all locations
+        </button>
+        <button type="button" onClick={() => {
+          handleSave()
+        }
+        }>
+        Save all shelters
         </button>
     </body>
     )
