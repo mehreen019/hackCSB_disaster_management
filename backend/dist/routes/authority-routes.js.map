@@ -1,1 +1,3 @@
+
 {"version":3,"file":"authority-routes.js","sourceRoot":"","sources":["../../src/routes/authority-routes.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,MAAM,EAAC,MAAM,SAAS,CAAC;AAC/B,OAAO,EAAE,YAAY,EAAE,WAAW,EAAE,MAAM,uCAAuC,CAAC;AAElF,MAAM,eAAe,GAAG,MAAM,EAAE,CAAC;AACjC,0EAA0E;AAC1E,eAAe,CAAC,IAAI,CAAC,gBAAgB,EAAE,YAAY,CAAC,CAAC;AACrD,eAAe,CAAC,GAAG,CAAC,eAAe,EAAE,WAAW,CAAC,CAAC;AAElD,eAAe,eAAe,CAAC"}
+

@@ -1,14 +1,17 @@
 import express from "express";
 import morgan from 'morgan';
 import appRouter from "./routes/index.js";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import axios from "axios";
+
 const app = express();
 const PORT = 5000;
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 app.use("/api", appRouter);
+app.use(cookieParser(process.env.COOKIE_SECRET));
 app.get('/api/find_places', async (req, res) => {
     try {
         const { text, language } = req.query;
@@ -39,5 +42,6 @@ app.get('/api/point', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 export default app;
 //# sourceMappingURL=app.js.map
