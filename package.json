@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
+    "@react-google-maps/api": "^2.19.3"
+  }
+}
