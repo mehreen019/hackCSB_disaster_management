@@ -1,5 +1,7 @@
-/* .App {
+ .App {
   text-align: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .App-logo {
@@ -35,4 +37,10 @@
   to {
     transform: rotate(360deg);
   }
-} */
+} 
+
+.map-box{
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+}
