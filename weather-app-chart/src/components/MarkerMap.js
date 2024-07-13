@@ -13,11 +13,18 @@ const center = {
   lng: 150.644,
 };
 
+let location = {
+    lat: 0.00,
+    lng: 0.00
+}
+
 const customIcon = '/house.png';
 
 const MapWithClickableCustomMarkers = () => {
   const isLoaded = useGoogleMaps('AIzaSyDF2rKGbY2nhUoe1rKcI3DhUKM_HZu2oUY');
   const mapRef = useRef(null);
+
+  const [locationArray, setLocationArray] = useState([])  
 
   function handleLocationError(browserHasGeolocation, infoWindow, pos, map) {
     infoWindow.setPosition(pos);
@@ -40,29 +47,37 @@ const MapWithClickableCustomMarkers = () => {
     const service = new window.google.maps.places.PlacesService(map);
 
     map.addListener('click', (event) => {
-      const request = {
-        location: event.latLng,
-        radius: '50', 
-      };
+        const request = {
+            location: event.latLng,
+            radius: '50', 
+        };
 
-      service.nearbySearch(request, (results, status) => {
-        if (status === window.google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
+        service.nearbySearch(request, (results, status) => {
+            if (status === window.google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
           
 
-          const place = results[0];
-            new window.google.maps.Marker({
-              position: place.geometry.location,
-              map: map,
-              icon: customIcon,
-              title: place.name,
-            });
+                const place = results[0];
+                new window.google.maps.Marker({
+                    position: place.geometry.location,
+                    map: map,
+                    icon: customIcon,
+                    title: place.name,
+                });
+            
+                const newLocation = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
+          
+                setLocationArray((prevArray) => {
+                    const updatedArray = [...prevArray, newLocation];
+                    console.log('Updated location array:', updatedArray); 
+                    return updatedArray;
+                });
 
-          // Log sorted place details or do something with them
-          toast.success("successfully placed marker")
-        } else {
-          toast.error("couldn't place marker");
-        }
-      });
+                toast.success("successfully placed marker")
+                
+            } else {
+                toast.error("couldn't place marker", locationArray);
+            }
+        });
     });
 
     const infoWindow = new window.google.maps.InfoWindow();
@@ -73,34 +88,44 @@ const MapWithClickableCustomMarkers = () => {
     locationButton.classList.add("custom-map-control-button");
     map.controls[window.google.maps.ControlPosition.TOP_CENTER].push(locationButton);
     locationButton.addEventListener("click", () => {
-    // Try HTML5 geolocation.
+    //HTML5 geolocation.
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
+      navigator.geolocation.getCurrentPosition( (position) => {
+            const pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+            };
 
-          infoWindow.setPosition(pos);
-          infoWindow.setContent("Location found.");
-          infoWindow.open(map);
-          map.setCenter(pos);
-        },
+            infoWindow.setPosition(pos);
+            infoWindow.setContent("Location found.");
+            infoWindow.open(map);
+            map.setCenter(pos); },
         () => {
-          handleLocationError(true, infoWindow, map.getCenter(), map);
-        },
-      );
-    } else {
-      // Browser doesn't support Geolocation
-      handleLocationError(false, infoWindow, map.getCenter(), map);
-    }
-  });
-
+                handleLocationError(true, infoWindow, map.getCenter(), map);
+        });
+        } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, infoWindow, map.getCenter(), map);
+        }
+    });
+    
+    
     mapRef.current = map;
   }, [isLoaded]);
 
-  return <div id="map" style={mapContainerStyle}></div>;
+  return(
+    <body>
+        <div>
+            <div id="map" style={mapContainerStyle}></div>;
+        </div>
+        <button type="button" onClick={() => {
+          console.log(locationArray);
+        }
+        }>
+        Get all locations
+        </button>
+    </body>
+    )
 };
 
 export default MapWithClickableCustomMarkers;
