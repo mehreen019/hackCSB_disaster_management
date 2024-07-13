@@ -1,12 +1,16 @@
 // src/components/LocationSearch.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import WeatherChart from './WeatherChart';
 
 const LocationSearch = () => {
     const [location, setLocation] = useState('');
     const [placeId, setPlaceId] = useState(null);
+    //setPlaceId('dhaka')
+    useEffect(() => {
+        setPlaceId('dhaka')
+    },[]);
 
     const handleSearch = async () => {
         try {
@@ -41,7 +45,7 @@ const LocationSearch = () => {
                 placeholder="Enter location"
             />
             <button onClick={handleSearch}>Search</button>
-
+            {placeId && <div>{placeId}</div>}
             {placeId && <WeatherChart placeId={placeId} />}
         </div>
     );
