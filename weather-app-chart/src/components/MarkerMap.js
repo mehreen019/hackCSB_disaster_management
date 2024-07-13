@@ -19,6 +19,16 @@ const MapWithClickableCustomMarkers = () => {
   const isLoaded = useGoogleMaps('AIzaSyDF2rKGbY2nhUoe1rKcI3DhUKM_HZu2oUY');
   const mapRef = useRef(null);
 
+  function handleLocationError(browserHasGeolocation, infoWindow, pos, map) {
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(
+      browserHasGeolocation
+        ? "Error: The Geolocation service failed."
+        : "Error: Your browser doesn't support geolocation.",
+    );
+    infoWindow.open(map);
+  }
+
   useEffect(() => {
     if (!isLoaded) return;
 
@@ -54,6 +64,38 @@ const MapWithClickableCustomMarkers = () => {
         }
       });
     });
+
+    const infoWindow = new window.google.maps.InfoWindow();
+
+    const locationButton = document.createElement("button");
+
+    locationButton.textContent = "Pan to Current Location";
+    locationButton.classList.add("custom-map-control-button");
+    map.controls[window.google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+    locationButton.addEventListener("click", () => {
+    // Try HTML5 geolocation.
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+
+          infoWindow.setPosition(pos);
+          infoWindow.setContent("Location found.");
+          infoWindow.open(map);
+          map.setCenter(pos);
+        },
+        () => {
+          handleLocationError(true, infoWindow, map.getCenter(), map);
+        },
+      );
+    } else {
+      // Browser doesn't support Geolocation
+      handleLocationError(false, infoWindow, map.getCenter(), map);
+    }
+  });
 
     mapRef.current = map;
   }, [isLoaded]);
