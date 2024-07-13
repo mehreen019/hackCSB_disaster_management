@@ -24,6 +24,7 @@ const customIcon = '/house.png';
 const MapWithClickableCustomMarkers = () => {
   const mapRef = useRef(null);
   const [locationArray, setLocationArray] = useState([]);
+  const [currentLocation, setCurrentLocation] = useState(null);
 
   const handleLocationError = (browserHasGeolocation, infoWindow, pos, map) => {
     infoWindow.setPosition(pos);
@@ -43,6 +44,9 @@ const MapWithClickableCustomMarkers = () => {
       });
 
       const service = new window.google.maps.places.PlacesService(map);
+      const directionsService = new window.google.maps.DirectionsService();
+      const directionsRenderer = new window.google.maps.DirectionsRenderer();
+      directionsRenderer.setMap(map);
 
       map.addListener('click', (event) => {
         const request = {
@@ -94,6 +98,7 @@ const MapWithClickableCustomMarkers = () => {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude,
               };
+              setCurrentLocation(pos);
               infoWindow.setPosition(pos);
               infoWindow.setContent('Location found.');
               infoWindow.open(map);
@@ -114,9 +119,73 @@ const MapWithClickableCustomMarkers = () => {
     });
   }, []);
 
+  const findNearestLocation = () => {
+    if (!currentLocation || locationArray.length === 0) {
+      toast.error('Current location or locations array is not available');
+      return;
+    }
+
+    const distanceService = new window.google.maps.DistanceMatrixService();
+    distanceService.getDistanceMatrix(
+      {
+        origins: [currentLocation],
+        destinations: locationArray,
+        travelMode: 'DRIVING',
+      },
+      (response, status) => {
+        if (status !== 'OK') {
+          toast.error('Error calculating distances');
+          return;
+        }
+
+        const distances = response.rows[0].elements;
+        let minDistance = Infinity;
+        let nearestLocationIndex = -1;
+
+        distances.forEach((element, index) => {
+          if (element.distance.value < minDistance) {
+            minDistance = element.distance.value;
+            nearestLocationIndex = index;
+          }
+        });
+
+        if (nearestLocationIndex !== -1) {
+          const nearestLocation = locationArray[nearestLocationIndex];
+          calculateAndDisplayRoute(nearestLocation);
+        } else {
+          toast.error('No nearest location found');
+        }
+      }
+    );
+  };
+
+  const calculateAndDisplayRoute = (destination) => {
+    const directionsService = new window.google.maps.DirectionsService();
+    const directionsRenderer = new window.google.maps.DirectionsRenderer();
+    directionsRenderer.setMap(mapRef.current);
+
+    directionsService.route(
+      {
+        origin: currentLocation,
+        destination: destination,
+        travelMode: 'DRIVING',
+      },
+      (response, status) => {
+        if (status === 'OK') {
+          directionsRenderer.setDirections(response);
+        } else {
+          toast.error('Directions request failed due to ' + status);
+        }
+      }
+    );
+  };
+
   return (
     <div>
       <div id="map" style={mapContainerStyle}></div>
+      <button type="button" onClick={findNearestLocation}>
+        Get Nearest Route
+      </button>
       <button type="button" onClick={() => console.log(locationArray)}>
         Get all locations
       </button>
