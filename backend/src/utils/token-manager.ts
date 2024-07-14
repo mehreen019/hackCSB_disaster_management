@@ -5,6 +5,7 @@ import { COOKIE_NAME } from "./constants.js";
 export const createToken = (id: string, email: string, expiresIn: string) => {
   const payload = { id, email };
   const token = jwt.sign(payload, "abcd62153", {
+
     expiresIn,
   });
   return token;

@@ -10,12 +10,14 @@ const app =express();
 const PORT = 5000;
 
 
+
 app.use(cookieParser("217ejdud"));
+
+
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 app.use("/api", appRouter);
-
 
 //app.use(cors({origin:"http://localhost:5000" }));
 
