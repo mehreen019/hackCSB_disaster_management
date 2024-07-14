@@ -19,12 +19,13 @@ export const getAllAuthority = async (req:Request,res:Response,next:NextFunction
     }
 };
 
-export const authoritySignup = async (req:Request,res:Response,next:NextFunction) =>
+export const authoritySignup = async (req:Request, res:Response, next:NextFunction) =>
     {
+      console.log("authority signup reached")
         try { 
             const {username,email,password} =req.body;
-        const existingAdmin = await Admin.findOne({ email });
-        const existingAuthority = await Authority.findOne({email});
+            const existingAdmin = await Admin.findOne({ email });
+            const existingAuthority = await Authority.findOne({email});
         if (existingAdmin || existingAuthority) return res.status(401).send(" Already registered");
             
             const hashedPassword = await hash(password,10);
@@ -36,19 +37,19 @@ export const authoritySignup = async (req:Request,res:Response,next:NextFunction
               });
               await authority.save();
 
-             res.clearCookie(COOKIE_NAME, {
+            res.clearCookie(COOKIE_NAME, {
                 domain:"localhost",
                   httpOnly:true,
                   signed:true,
                   path:"/",
                 });
-                 const token = createToken(authority._id.toString(),authority.email,"7d");
-                 const expires = new Date();
-                 expires.setDate(expires.getDate()+7);
-                 res.cookie(COOKIE_NAME,token,{path:"/",domain:"localhost",expires,
-                  httpOnly:true,
-                  signed:true,
-                 });
+            const token = createToken(authority._id.toString(),authority.email,"7d");
+            const expires = new Date();
+            expires.setDate(expires.getDate()+7);
+            res.cookie(COOKIE_NAME,token,{path:"/",domain:"localhost",expires,
+              httpOnly:true,
+              signed:true,
+            });
                 
             console.log("Function called");
             return res.status(200).json({message:"ok", role:authority.role });

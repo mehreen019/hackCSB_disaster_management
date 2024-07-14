@@ -1,8 +1,6 @@
 // models/Authority.ts
 import { Schema, model } from 'mongoose';
 
-
-
 const authoritySchema = new Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },

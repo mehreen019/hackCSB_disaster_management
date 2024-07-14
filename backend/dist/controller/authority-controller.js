@@ -1,11 +1,9 @@
-
 import { Authority } from "../models/authority.js";
 import { Admin } from "../models/admin.js";
 import { hash, compare } from "bcrypt";
 import { createToken } from "../utils/token-manager.js";
 import { COOKIE_NAME } from "../utils/constants.js";
 import { ShelterList } from "../models/Shelters.js";
-
 export const getAllAuthority = async (req, res, next) => {
     try {
         const authority = await Authority.find();
@@ -18,6 +16,7 @@ export const getAllAuthority = async (req, res, next) => {
     }
 };
 export const authoritySignup = async (req, res, next) => {
+    console.log("authority signup reached");
     try {
         const { username, email, password } = req.body;
         const existingAdmin = await Admin.findOne({ email });
@@ -84,10 +83,8 @@ export const authorityLogin = async (req, res, next) => {
     catch (error) {
         console.log(error);
         return res.status(200).json({ message: "ERROR", cause: error.message });
-          }
+    }
 };
-
-
 export const saveShelters = async (req, res, next) => {
     const { locationArray } = req.body;
     try {
