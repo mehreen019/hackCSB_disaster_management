@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { toast } from 'react-hot-toast';
-import loader from './GoogleMapsLoader';
+import {toast } from 'react-hot-toast';
+import useGoogleMaps from './hooks/useMap';
+import loader from './GoogleMapsLoader'; 
+import { storeShelterLocations, getShelterLocations } from '../helpers/api-comm';
+
 
 const mapContainerStyle = {
   width: '70vw',
   height: '70vh',
-  margin: '50px'
+  margin: '50px',
 };
 
 const center = {
@@ -13,7 +16,10 @@ const center = {
   lng: 150.644,
 };
 
-const customIcon = '/house.png';
+// let location = {
+//   lat: 0.00,
+//   lng: 0.00
+// }
 const currentLocationIcon = {
   path: window.google?.maps?.SymbolPath.CIRCLE || 'M0,0',
   fillColor: 'black',
@@ -22,6 +28,9 @@ const currentLocationIcon = {
   strokeColor: 'white',
   strokeWeight: 1
 };
+
+
+const customIcon = '/house.png';
 
 const MapWithClickableCustomMarkers = () => {
   const mapRef = useRef(null);
@@ -38,6 +47,16 @@ const MapWithClickableCustomMarkers = () => {
     );
     infoWindow.open(map);
   };
+
+
+  const handleSave = async()=>{
+    console.log("save func reached")
+    const wholeResponse = await storeShelterLocations(locationArray); 
+    console.log(wholeResponse)
+    toast.success(wholeResponse.message)
+  }
+
+  
 
   useEffect(() => {
     loader.load().then(() => {
@@ -65,7 +84,7 @@ const MapWithClickableCustomMarkers = () => {
           title: 'Clicked Location',
         });
 
-        const newLocation = { lat: clickedLocation.lat(), lng: clickedLocation.lng() };
+        const newLocation = { name : 'gen name', lat: clickedLocation.lat(), lng: clickedLocation.lng() };
         setLocationArray((prevArray) => {
           const updatedArray = [...prevArray, newLocation];
           console.log('Updated location array:', updatedArray);
@@ -96,12 +115,12 @@ const MapWithClickableCustomMarkers = () => {
               infoWindow.open(map);
               map.setCenter(pos);
 
-              new window.google.maps.Marker({
-                position: pos,
-                map: map,
-                title: 'You',
-                icon: currentLocationIcon
-              });
+              // new window.google.maps.Marker({
+              //   position: pos,
+              //   map: map,
+              //   title: 'You',
+              //   icon: currentLocationIcon
+              // });
             },
             () => {
               handleLocationError(true, infoWindow, map.getCenter(), map);
@@ -118,6 +137,38 @@ const MapWithClickableCustomMarkers = () => {
     });
   }, []);
 
+  const handleGet = async () => {
+    console.log(locationArray);
+    console.log("get func reached");
+  
+    try {
+      const wholeResponse = await getShelterLocations(); 
+      console.log(wholeResponse);
+  
+      const newShelters = wholeResponse.shelters.map((shelter) => ({
+        name: shelter.name,
+        lat: parseFloat(shelter.lat),
+        lng: parseFloat(shelter.lng)
+      }));
+  
+      setLocationArray((prev) => [...prev, ...newShelters]);
+
+      if (mapRef.current) {
+        newShelters.forEach((place) => {
+          new window.google.maps.Marker({
+            position: { lat: place.lat, lng: place.lng },
+            map: mapRef.current,
+            icon: customIcon,
+            title: place.name,
+          });
+        });
+      }
+
+      console.log( "location array from handleget", locationArray)
+    } catch (error) {
+      console.error('Error fetching shelters:', error);
+    }
+  };
   const findNearestLocation = () => {
     if (!currentLocation || locationArray.length === 0) {
       toast.error('Current location or locations array is not available');
@@ -182,17 +233,84 @@ const MapWithClickableCustomMarkers = () => {
     );
   };
 
+
   return (
     <div>
       <div id="map" style={mapContainerStyle}></div>
       <button type="button" onClick={findNearestLocation}>
         Get Nearest Route
       </button>
-      <button type="button" onClick={() => console.log(locationArray)}>
+      <button type="button" onClick={() =>{
+        handleGet()
+      }}>
         Get all locations
-      </button>
+        </button>
+        <button type="button" onClick={() => {
+          handleSave()
+        }
+        }>
+        Save all shelters
+        </button>
     </div>
-  );
+    )
 };
 
 export default MapWithClickableCustomMarkers;
+/*import React, { Component } from 'react';
+
+class MarkerMap extends Component {
+
+    componentDidMount() {
+
+        // Load the Google Maps JavaScript API
+
+        const script = document.createElement('script');
+
+        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDF2rKGbY2nhUoe1rKcI3DhUKM_HZu2oUY&libraries=places`;
+
+        script.async = true;
+
+        script.defer = true;
+
+        script.onload = this.initMap;
+
+        document.head.appendChild(script);
+    }
+
+    initMap() {
+
+        // Initialize the map
+
+        const map = new window.google.maps.Map(document.getElementById('map'), {    
+
+            center: { lat: 37.7749, lng: -122.4194 }, // Set your initial map center coordinates
+
+            zoom: 12, // Set the initial zoom level
+
+        });
+
+        // Add markers to the map
+
+        const marker = new window.google.maps.Marker({
+
+            position: { lat: 37.7749, lng: -122.4194 }, // Set marker coordinates
+
+            map: map,
+
+            icon: '/logo192.png', // Path to your custom marker icon
+
+            title: 'Custom Marker',
+
+        });
+
+    }
+
+    render() {
+
+        return <div id="map" style={{ width: '50%', height: '50vh' }}></div>;
+
+    }
+
+}
+
+export default MarkerMap;*/
