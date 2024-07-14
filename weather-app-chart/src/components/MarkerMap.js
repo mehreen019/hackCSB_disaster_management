@@ -31,6 +31,9 @@ const MapWithClickableCustomMarkers = () => {
   const [locationArray, setLocationArray] = useState([]);
   const [currentLocation, setCurrentLocation] = useState(null);
   const [directionsRenderer, setDirectionsRenderer] = useState(null);
+  const [distance, setDistance] = useState(null)
+  const [duration, setDuration] = useState(null);
+  const [nearestCalc, setNearestCalc] = useState(false);
 
   const handleLocationError = (browserHasGeolocation, infoWindow, pos, map) => {
     infoWindow.setPosition(pos);
@@ -105,7 +108,8 @@ const MapWithClickableCustomMarkers = () => {
       locationButton.classList.add('custom-map-control-button');
       map.controls[window.google.maps.ControlPosition.TOP_CENTER].push(locationButton);
 
-      locationButton.addEventListener('click', () => {
+      locationButton.addEventListener('click', 
+        () => {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -113,14 +117,42 @@ const MapWithClickableCustomMarkers = () => {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude,
               };
+
               setCurrentLocation(pos);
               infoWindow.setPosition(pos);
               infoWindow.setContent('Location found.');
               infoWindow.open(map);
               map.setCenter(pos);
+              console.log( position.coords.accuracy )
             },
+            /*async () => {
+              const response = await fetch('https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyDF2rKGbY2nhUoe1rKcI3DhUKM_HZu2oUY', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json'
+                      },
+                    body: JSON.stringify({ considerIp: true })
+                  });
+              const data = await response.json();
+
+              console.log(data)
+
+              const pos = {
+                lat: data.location.lat,
+                lng: data.location.lng,
+              };
+
+              setCurrentLocation(pos);
+              infoWindow.setPosition(pos);
+              infoWindow.setContent('Location found.');
+              infoWindow.open(map);
+              map.setCenter(pos);
+
+            },*/
             () => {
               handleLocationError(true, infoWindow, map.getCenter(), map);
+            },{
+              enableHighAccuracy: true,
             }
           );
         } else {
@@ -223,6 +255,10 @@ const MapWithClickableCustomMarkers = () => {
       },
       (response, status) => {
         if (status === 'OK') {
+          setDistance(response.routes[0].legs[0].distance.text);
+          setDuration( response.routes[0].legs[0].duration.text );
+          setNearestCalc(true);
+
           directionsRenderer.setDirections(response);
         } else {
           toast.error('Directions request failed due to ' + status);
@@ -231,18 +267,56 @@ const MapWithClickableCustomMarkers = () => {
     );
   };
 
+  async function getDisasterPredictions() {
+    try {
+        const earthquakeData = await fetch('https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2023-07-01&endtime=2023-07-11');
+        const earthquakeJson = await earthquakeData.json();
+
+        console.log('Earthquake Data:', earthquakeJson);
+        
+        // Process and display the data in your app
+    } catch (error) {
+        console.error('Error fetching disaster predictions:', error);
+    }
+      }
+
+
   return (
     <div>
-      <div id="map" style={mapContainerStyle}></div>
-      <button type="button" onClick={findNearestLocation}>
-        Get Nearest Route
-      </button>
-      <button type="button" onClick={handleGet}>
-        Get all locations
-      </button>
-      <button type="button" onClick={handleSave}>
-        Save all shelters
-      </button>
+      { nearestCalc?( <>
+        <div id="map" style={mapContainerStyle}></div>
+        <h3> Distance: {distance}     Duration: {duration} </h3>
+        <button type="button" onClick={findNearestLocation}>
+          Get Nearest Route
+        </button>
+        <button type="button" onClick={handleGet}>
+          Get all locations
+        </button>
+        <button type="button" onClick={handleSave}>
+          Save all shelters
+        </button>
+        <button type="button" onClick={getDisasterPredictions}>
+          Get earthquake predictions
+        </button>
+        </>
+      ) : 
+      (
+        <>
+        <div id="map" style={mapContainerStyle}></div>
+        <button type="button" onClick={findNearestLocation}>
+          Get Nearest Route
+        </button>
+        <button type="button" onClick={handleGet}>
+          Get all locations
+        </button>
+        <button type="button" onClick={handleSave}>
+          Save all shelters
+        </button>
+        <button type="button" onClick={getDisasterPredictions}>
+          Get earthquake predictions
+        </button>
+        </>
+      )}
     </div>
   );
 };
