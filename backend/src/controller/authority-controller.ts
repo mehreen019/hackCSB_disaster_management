@@ -26,6 +26,7 @@ export const authoritySignup = async (req:Request, res:Response, next:NextFuncti
             const {username,email,password} =req.body;
             const existingAdmin = await Admin.findOne({ email });
             const existingAuthority = await Authority.findOne({email});
+
         if (existingAdmin || existingAuthority) return res.status(401).send(" Already registered");
             
             const hashedPassword = await hash(password,10);

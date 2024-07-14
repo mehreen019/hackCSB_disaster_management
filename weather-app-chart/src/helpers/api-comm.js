@@ -75,4 +75,3 @@ export const loginadmin = async (email , password) => {
      const data = await res.data;
      return data;
    };
- 
