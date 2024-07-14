@@ -16,7 +16,6 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use("/api", appRouter);
 
-
 //app.use(cors({origin:"http://localhost:5000" }));
 
 
