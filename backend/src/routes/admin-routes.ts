@@ -1,10 +1,10 @@
 import {Router} from "express";
 import { adminLogin, adminSignup, getAllAdmins } from "../controller/admin-controller.js";
-import { loginValidator, signupValidator, validate } from "../utils/validators.js";
+//import { loginValidator, signupValidator, validate } from "../utils/validators.js";
 
 
 const adminRoutes = Router();
 adminRoutes.get("/",getAllAdmins);
-adminRoutes.post("/signup",validate(signupValidator),adminSignup);
-adminRoutes.post("/login",validate(loginValidator),adminLogin);
+adminRoutes.post("/signup",adminSignup);
+adminRoutes.post("/login",adminLogin);
 export default adminRoutes;

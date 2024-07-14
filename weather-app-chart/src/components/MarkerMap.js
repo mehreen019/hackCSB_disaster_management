@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { toast } from 'react-hot-toast';
+import {toast } from 'react-hot-toast';
+import useGoogleMaps from './hooks/useMap';
 import loader from './GoogleMapsLoader'; 
+import { storeShelterLocations, getShelterLocations } from '../helpers/api-comm';
+
 
 const mapContainerStyle = {
   width: '70vw',
@@ -36,8 +39,17 @@ const MapWithClickableCustomMarkers = () => {
     infoWindow.open(map);
   };
 
+  const handleSave = async()=>{
+    console.log("save func reached")
+    const wholeResponse = await storeShelterLocations(locationArray); 
+    console.log(wholeResponse)
+    toast.success(wholeResponse.message)
+  }
+
+  
+
   useEffect(() => {
-    loader.load().then(() => {
+    loader.load().then( () => {
       const map = new window.google.maps.Map(document.getElementById('map'), {
         center: center,
         zoom: 8,
@@ -56,24 +68,24 @@ const MapWithClickableCustomMarkers = () => {
 
         service.nearbySearch(request, (results, status) => {
           if (status === window.google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
-            const place = results[0];
-            if (place.geometry) {
-              new window.google.maps.Marker({
-                position: place.geometry.location,
-                map: map,
-                icon: customIcon,
-                title: place.name,
-              });
+                const place = results[0];
+                if (place.geometry) {
+                    new window.google.maps.Marker({
+                    position: place.geometry.location,
+                    map: map,
+                    icon: customIcon,
+                    title: place.name,
+                });
+            
+                const newLocation = { name:place.name, lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
+          
+                setLocationArray((prevArray) => {
+                    const updatedArray = [...prevArray, newLocation];
+                    console.log('Updated location array:', updatedArray); 
+                    return updatedArray;
+                });
 
-              const newLocation = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
-
-              setLocationArray((prevArray) => {
-                const updatedArray = [...prevArray, newLocation];
-                console.log('Updated location array:', updatedArray);
-                return updatedArray;
-              });
-
-              toast.success('Successfully placed marker');
+                toast.success('Successfully placed marker');
             } else {
               toast.error("Place geometry not found");
             }
@@ -112,12 +124,44 @@ const MapWithClickableCustomMarkers = () => {
           handleLocationError(false, infoWindow, map.getCenter(), map);
         }
       });
-
       mapRef.current = map;
     }).catch(error => {
       console.error('Error loading Google Maps API:', error);
     });
   }, []);
+
+  const handleGet = async () => {
+    console.log(locationArray);
+    console.log("get func reached");
+  
+    try {
+      const wholeResponse = await getShelterLocations(); 
+      console.log(wholeResponse);
+  
+      const newShelters = wholeResponse.shelters.map((shelter) => ({
+        name: shelter.name,
+        lat: parseFloat(shelter.lat),
+        lng: parseFloat(shelter.lng)
+      }));
+  
+      setLocationArray((prev) => [...prev, ...newShelters]);
+
+      if (mapRef.current) {
+        newShelters.forEach((place) => {
+          new window.google.maps.Marker({
+            position: { lat: place.lat, lng: place.lng },
+            map: mapRef.current,
+            icon: customIcon,
+            title: place.name,
+          });
+        });
+      }
+
+      console.log( "location array from handleget", locationArray)
+    } catch (error) {
+      console.error('Error fetching shelters:', error);
+    }
+  };
 
   const findNearestLocation = () => {
     if (!currentLocation || locationArray.length === 0) {
@@ -186,11 +230,19 @@ const MapWithClickableCustomMarkers = () => {
       <button type="button" onClick={findNearestLocation}>
         Get Nearest Route
       </button>
-      <button type="button" onClick={() => console.log(locationArray)}>
+      <button type="button" onClick={() =>{
+        handleGet()
+      }}>
         Get all locations
-      </button>
+        </button>
+        <button type="button" onClick={() => {
+          handleSave()
+        }
+        }>
+        Save all shelters
+        </button>
     </div>
-  );
+    )
 };
 
 export default MapWithClickableCustomMarkers;
