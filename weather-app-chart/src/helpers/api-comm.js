@@ -49,6 +49,7 @@ export const getShelterLocations = async () => {
 
 
  export const loginadmin = async (email, password) => {
+  Role = 'admin';
   try {
     console.log('Attempting to log in with email:', email);
 
@@ -149,7 +150,7 @@ export const getShelterLocations = async () => {
   
     if(Role==="admin"){  
       console.log(Role);
-     const res = await axios.get("/admin_user/logout");
+     const res = await axios.get("http://localhost:5000/api/admin_user/logout");
     if (res.status !== 200) {
       throw new Error("Unable to delete chats");
     }
@@ -159,7 +160,7 @@ export const getShelterLocations = async () => {
     return data;}
     else if(Role==="authority")
     {
-      const res = await axios.get("/authority_user/logout");
+      const res = await axios.get("http://localhost:5000/api/authority_user/logout");
     if (res.status !== 200) {
       throw new Error("Unable to delete chats");
     }

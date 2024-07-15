@@ -32,11 +32,11 @@ const Header = () => {
   return (
     <AppBar sx={{ bgcolor: "transparent", position: "static", boxShadow: "none" }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-  
+       
         <div>
           {auth?.isLoggedIn ? (
             <>
-              <NavigationLink bg="#00fffc" to="/" text="Dashboard" textColor="black" />
+              <NavigationLink bg="#00fffc" to="/" text="Logout" textColor="black" onClick={auth.logout}  />
               <NavigationLink bg="#51538f" textColor="white" to="/" text="Profile" />
             </>
           ) : (
@@ -79,10 +79,10 @@ const Header = () => {
               </Menu>
             </>
           )}
+          
         </div>
-        </Toolbar>
-      </AppBar>
-      
+      </Toolbar>
+    </AppBar>
   );
 };
 
