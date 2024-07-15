@@ -3,7 +3,7 @@ import { toast } from 'react-hot-toast';
 import useGoogleMaps from './hooks/useMap';
 import loader from './GoogleMapsLoader'; 
 import { storeShelterLocations, getShelterLocations } from '../helpers/api-comm';
-
+import WeatherComponent from './CoordinateWeather';
 const mapContainerStyle = {
   width: '70vw',
   height: '70vh',
@@ -315,6 +315,9 @@ const MapWithClickableCustomMarkers = () => {
         <button type="button" onClick={getDisasterPredictions}>
           Get earthquake predictions
         </button>
+        {currentLocation && (
+        <WeatherComponent lat={currentLocation.lat} lon={currentLocation.lng} />
+      )}
         </>
       )}
     </div>

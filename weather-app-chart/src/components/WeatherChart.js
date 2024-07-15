@@ -3,6 +3,8 @@ import axios from 'axios';
 import TemperatureChart from './TemperatureChart';
 import WindSpeedChart from './WindSpeedChart';
 import CloudCoverChart from './CloudCoverChart';
+import './mapStyle.css'
+import PrecipitationChart from './PrecipitationChart';
 
 const WeatherChart = ({ placeId }) => {
     const [weatherData, setWeatherData] = useState(null);
@@ -38,14 +40,28 @@ const WeatherChart = ({ placeId }) => {
     const hourlyData = weatherData.hourly.data;
 
     const chartStyle = {
-        width: '600px',
-        height: '400px',
-        marginBottom: '20px'
+        // width: '600px',
+        // height: '400px',
+        // marginBottom: '20px'
     };
 
     return (
         <div>
-            <div style={chartStyle}>
+            <h2>City Weather Data</h2>
+            <h3> Current Summary : {weatherData.current.summary}</h3>
+            <p>Temperature : {weatherData.current.temperature}</p>
+            <p>Wind Speed : {weatherData.current.wind.speed}, {weatherData.current.wind.dir}</p>
+            <p>Precipitation : {weatherData.current.precipitation.total}, {weatherData.current.precipitation.type} </p>
+
+
+            <div className="tgrid-container">
+            <div className="tchart-container"> <TemperatureChart data={hourlyData} /></div>
+            <div className="tchart-container"> <WindSpeedChart data={hourlyData} /></div>
+            <div className="tchart-container"> <CloudCoverChart data={hourlyData} /></div>
+            <div className="tchart-container"> <PrecipitationChart data={hourlyData} /></div>
+            
+            </div>
+            {/* <div style={chartStyle}>
                 <TemperatureChart data={hourlyData} />
             </div>
             <div style={chartStyle}>
@@ -53,7 +69,7 @@ const WeatherChart = ({ placeId }) => {
             </div>
             <div style={chartStyle}>
                 <CloudCoverChart data={hourlyData} />
-            </div>
+            </div> */}
         </div>
     );
 };
