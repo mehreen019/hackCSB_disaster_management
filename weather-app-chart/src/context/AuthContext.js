@@ -29,10 +29,13 @@ import {
     const loginAdmin = async (email, password) => {
       try{
       const data = await loginadmin(email, password);
-      if (data) {
+      console.log("here is the response from api-com : ", data)
+     // console.log(data.response.status)
+      if (data === 200) {
         setUser({ email: data.email, username: data.name });
         setIsLoggedIn(true);
       }
+      else throw new Error(`${data}`); 
     }catch (error) {
       console.error("Failed to login admin:", error);
     }
