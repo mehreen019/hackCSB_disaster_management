@@ -5,6 +5,7 @@ import ForecastHumidityChart from './ForecastHumidityChart';
 import ForecastRainChart from './ForecastRainChart';
 import ForecastPressureChart from './ForecastPressureChart';
 import ForecastWindSpeedChart from './ForecastWindSpeedChart';
+import './mapStyle.css'
 
 // import TodaysTemperatureChart from './TodaysTemperatureChart';
 // import TodaysHumidityChart from './TodaysHumidityChart';
@@ -107,23 +108,25 @@ const WeatherComponent = ({ lat, lon }) => {
     <div>
       <h2>Forecast Weather Data (7 Days)</h2>
       {weatherData && (
-        <div>
-          <ForecastTemperatureChart data={weatherData.hourly} />
-          <ForecastHumidityChart data={weatherData.hourly} />
-          <ForecastRainChart data={weatherData.hourly} />
-          <ForecastPressureChart data={weatherData.hourly} />
-          <ForecastWindSpeedChart data={weatherData.hourly} />
+        <div className="grid-container">
+          <div className="chart-container"><ForecastTemperatureChart data={weatherData.hourly} /></div>
+          <div className="chart-container"><ForecastHumidityChart data={weatherData.hourly} /></div>
+          <div className="chart-container"><ForecastRainChart data={weatherData.hourly} /></div>
+          <div className="chart-container"><ForecastPressureChart data={weatherData.hourly} /></div>
+          <div className="chart-container"><ForecastWindSpeedChart data={weatherData.hourly} /></div>
         </div>
       )}
+      
+     
 
     <h2>Today's Weather Data</h2>
       {weatherData && (
-        <div>
-          <ForecastTemperatureChart data={todaysData} />
-          <ForecastHumidityChart data={todaysData} />
-          <ForecastRainChart data={todaysData} />
-          <ForecastPressureChart data={todaysData} />
-          <ForecastWindSpeedChart data={todaysData} />
+        <div className="tgrid-container">
+          <div className="tchart-container"><ForecastTemperatureChart data={todaysData} /> </div>
+          <div className="tchart-container"><ForecastHumidityChart data={todaysData} /> </div>
+          <div className="tchart-container"><ForecastRainChart data={todaysData} /> </div>
+          <div className="tchart-container"><ForecastPressureChart data={todaysData} /> </div>
+          <div className="tchart-container"><ForecastWindSpeedChart data={todaysData} /> </div>
         </div>
       )}
     </div>
