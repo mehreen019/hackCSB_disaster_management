@@ -43,9 +43,9 @@ const CurrentTemperatureChart = ({ data }) => {
         type: 'time',
         time: {
           unit: 'hour',
-          tooltipFormat: 'PPpp',
+          tooltipFormat: 'PPpp', // Format for the tooltip
           displayFormats: {
-            hour: 'HH:mm',
+            hour: 'PP HH:mm', // Format for the x-axis labels
           },
         },
       },
@@ -65,7 +65,7 @@ const CurrentTemperatureChart = ({ data }) => {
           label: function(context) {
             const label = context.dataset.label || '';
             const value = context.raw;
-            const formattedTime = format(new Date(context.label), 'PPpp');
+            const formattedTime = format(new Date(context.label), 'PP HH:mm');
             return `${label}: ${value}°C at ${formattedTime}`;
           }
         }

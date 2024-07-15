@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import CurrentTemperatureChart from './CurrentTemperatureChart';
+import CurrentHumidityChart from './CurrentHumidityChart';
+import CurrentRainChart from './CurrentRainChart';
+import CurrentPressureChart from './CurrentPressureChart';
+import CurrentWindSpeedChart from './CurrentWindSpeedChart';
 
 const WeatherComponent = ({ lat, lon }) => {
   const [weatherData, setWeatherData] = useState(null);
@@ -20,6 +24,7 @@ const WeatherComponent = ({ lat, lon }) => {
         const url = "https://api.open-meteo.com/v1/forecast";
         const response = await axios.get(url, { params });
         const data = processWeatherData(response.data);
+        console.log('lat-lang data: ', data)
         setWeatherData(data);
       } catch (error) {
         setError(error.message);
@@ -77,11 +82,15 @@ const WeatherComponent = ({ lat, lon }) => {
 
   return (
     <div>
-      <h2>Weather Data</h2>
+      <h2>Forecast Weather Data (7 Days)</h2>
       {weatherData && (
         <div>
-          <h3>Current Weather:</h3>
+          
           <CurrentTemperatureChart data={weatherData.hourly} />
+          <CurrentHumidityChart data={weatherData.hourly} />
+          <CurrentRainChart data={weatherData.hourly} />
+          <CurrentPressureChart data={weatherData.hourly} />
+          <CurrentWindSpeedChart data={weatherData.hourly} />
         </div>
       )}
     </div>
