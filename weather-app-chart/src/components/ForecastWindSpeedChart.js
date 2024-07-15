@@ -23,7 +23,7 @@ ChartJS.register(
   TimeScale
 );
 
-const CurrentWindSpeedChart = ({ data }) => {
+const ForecastWindSpeedChart = ({ data }) => {
   const chartData = {
     labels: data.time,
     datasets: [
@@ -81,4 +81,4 @@ const CurrentWindSpeedChart = ({ data }) => {
   return <Line data={chartData} options={options} />;
 };
 
-export default CurrentWindSpeedChart;
+export default ForecastWindSpeedChart;

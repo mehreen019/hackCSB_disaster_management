@@ -23,7 +23,7 @@ ChartJS.register(
   TimeScale
 );
 
-const CurrentHumidityChart = ({ data }) => {
+const ForecastHumidityChart = ({ data }) => {
   const chartData = {
     labels: data.time,
     datasets: [
@@ -81,4 +81,4 @@ const CurrentHumidityChart = ({ data }) => {
   return <Line data={chartData} options={options} />;
 };
 
-export default CurrentHumidityChart;
+export default ForecastHumidityChart;

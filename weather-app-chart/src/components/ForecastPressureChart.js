@@ -23,7 +23,7 @@ ChartJS.register(
   TimeScale
 );
 
-const CurrentPressureChart = ({ data }) => {
+const ForecastPressureChart = ({ data }) => {
   const chartData = {
     labels: data.time,
     datasets: [
@@ -81,4 +81,4 @@ const CurrentPressureChart = ({ data }) => {
   return <Line data={chartData} options={options} />;
 };
 
-export default CurrentPressureChart;
+export default ForecastPressureChart;

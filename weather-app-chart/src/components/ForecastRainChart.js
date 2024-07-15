@@ -23,7 +23,7 @@ ChartJS.register(
   TimeScale
 );
 
-const CurrentRainChart = ({ data }) => {
+const ForecastRainChart = ({ data }) => {
   const chartData = {
     labels: data.time,
     datasets: [
@@ -81,4 +81,4 @@ const CurrentRainChart = ({ data }) => {
   return <Line data={chartData} options={options} />;
 };
 
-export default CurrentRainChart;
+export default ForecastRainChart;

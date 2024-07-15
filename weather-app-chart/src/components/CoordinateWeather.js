@@ -106,19 +106,7 @@ const WeatherComponent = ({ lat, lon }) => {
 
   return (
     <div>
-      <h2>Forecast Weather Data (7 Days)</h2>
-      {weatherData && (
-        <div className="grid-container">
-          <div className="chart-container"><ForecastTemperatureChart data={weatherData.hourly} /></div>
-          <div className="chart-container"><ForecastHumidityChart data={weatherData.hourly} /></div>
-          <div className="chart-container"><ForecastRainChart data={weatherData.hourly} /></div>
-          <div className="chart-container"><ForecastPressureChart data={weatherData.hourly} /></div>
-          <div className="chart-container"><ForecastWindSpeedChart data={weatherData.hourly} /></div>
-        </div>
-      )}
-      
      
-
     <h2>Today's Weather Data</h2>
       {weatherData && (
         <div className="tgrid-container">
@@ -127,6 +115,17 @@ const WeatherComponent = ({ lat, lon }) => {
           <div className="tchart-container"><ForecastRainChart data={todaysData} /> </div>
           <div className="tchart-container"><ForecastPressureChart data={todaysData} /> </div>
           <div className="tchart-container"><ForecastWindSpeedChart data={todaysData} /> </div>
+        </div>
+      )}
+
+    <h2>Forecast Weather Data (7 Days)</h2>
+      {weatherData && (
+        <div className="grid-container">
+          <div className="chart-container"><ForecastTemperatureChart data={weatherData.hourly} /></div>
+          <div className="chart-container"><ForecastHumidityChart data={weatherData.hourly} /></div>
+          <div className="chart-container"><ForecastRainChart data={weatherData.hourly} /></div>
+          <div className="chart-container"><ForecastPressureChart data={weatherData.hourly} /></div>
+          <div className="chart-container"><ForecastWindSpeedChart data={weatherData.hourly} /></div>
         </div>
       )}
     </div>

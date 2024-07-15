@@ -23,13 +23,13 @@ ChartJS.register(
   TimeScale
 );
 
-const CurrentTemperatureChart = ({ data }) => {
+const ForecastTemperatureChart = ({ data }) => {
   const chartData = {
     labels: data.time,
     datasets: [
       {
         label: 'Temperature (°C)',
-        data: data.temperature2m, // Ensure the property name matches
+        data: data.temperature2m, 
         fill: false,
         borderColor: 'rgba(75,192,192,1)',
         tension: 0.1,
@@ -43,9 +43,9 @@ const CurrentTemperatureChart = ({ data }) => {
         type: 'time',
         time: {
           unit: 'hour',
-          tooltipFormat: 'PPpp', // Format for the tooltip
+          tooltipFormat: 'PPpp', 
           displayFormats: {
-            hour: 'PP HH:mm', // Format for the x-axis labels
+            hour: 'PP HH:mm',
           },
         },
       },
@@ -81,4 +81,4 @@ const CurrentTemperatureChart = ({ data }) => {
   return <Line data={chartData} options={options} />;
 };
 
-export default CurrentTemperatureChart;
+export default ForecastTemperatureChart;
