@@ -11,14 +11,17 @@ import AuthorityLogin from "./pages/authoritylogin";
 import AuthoritySignup from "./pages/authoritysignup";
 import AdminSignup from "./pages/adminsignup";
 import NotFound from "./pages/NotFound";
+import LandingPage from './pages/LandingPage';
 
 
 function App() {
     return (
         <main>
-    
-                <Routes>
-                <Route path="/" element={<Home />} />
+            <LandingPage/>
+            <Header/>
+            <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/home" element={<Home />} />
                 <Route path="/admin_user/login" element={<AdminLogin/>} />
                 <Route path="/admin_user/signup" element={<AdminSignup />} />
                 <Route path="/authority_user/login" element={<AuthorityLogin />} />
