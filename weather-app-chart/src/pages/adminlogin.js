@@ -5,6 +5,7 @@ import CustomizedInput from "../components/shared/CustomizedInput";
 import { toast } from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import LandingPage from "./LandingPage";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -17,7 +18,8 @@ const AdminLogin = () => {
     const password = formData.get("password");
     try {
       toast.loading("Signing In", { id: "login" });
-      await auth?.loginAdmin(email, password);
+      const res = await auth?.loginAdmin(email, password);
+      console.log('from login page = ', res);
       toast.success("Logged In Successfully", { id: "login" });
     } catch (error) {
       console.log(error);
@@ -32,6 +34,9 @@ const AdminLogin = () => {
   }, [auth, navigate]);
 
   return (
+    <div>
+     
+    
     <Box
       width="100%"
       height="100vh"
@@ -82,6 +87,7 @@ const AdminLogin = () => {
         </form>
       </Box>
     </Box>
+  </div>
   );
 };
 

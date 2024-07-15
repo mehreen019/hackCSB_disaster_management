@@ -5,7 +5,7 @@ import {
     signupadmin,
     loginauthority,
     signupauthority,
-    // logoutUser, // Uncomment if you have a logout function
+    logoutUser, // Uncomment if you have a logout function
 } from "../helpers/api-comm";
   
   const AuthContext = createContext({});
@@ -29,10 +29,13 @@ import {
     const loginAdmin = async (email, password) => {
       try{
       const data = await loginadmin(email, password);
-      if (data) {
+      console.log("here is the response from api-com : ", data)
+     // console.log(data.response.status)
+      if (data === 200) {
         setUser({ email: data.email, username: data.name });
         setIsLoggedIn(true);
       }
+      else throw new Error(`${data}`); 
     }catch (error) {
       console.error("Failed to login admin:", error);
     }
@@ -75,14 +78,15 @@ import {
         console.error("Failed to login admin:", error);
       } 
     };
-  
     // Uncomment if you have a logout function
-    // const logout = async () => {
-    //   await logoutUser();
-    //   setIsLoggedIn(false);
-    //   setUser(null);
-    //   window.location.reload();
-    // };
+    const logout = async () => {
+      console.log(user?.role);
+      await logoutUser();
+      console.log("Logged out");
+      setIsLoggedIn(false);
+      setUser(null);
+    //  window.location.reload();
+    };
   
     const value = {
       user,
@@ -91,7 +95,7 @@ import {
       signupAdmin,
       loginAuthority,
       signupAuthority,
-      // logout, // Uncomment if you have a logout function
+      logout, // Uncomment if you have a logout function
     };
   
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
