@@ -12,7 +12,7 @@
   
   
   .chart-container {
-    min-width: 100px; /* Ensures charts do not overflow */
+    min-width: 0; /* Ensures charts do not overflow */
     min-height: 200px; /* Sets a minimum height for each chart */
     max-height: 500px;
     /* max-width: 1200px; */
