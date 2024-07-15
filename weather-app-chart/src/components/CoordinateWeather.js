@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import CurrentTemperatureChart from './CurrentTemperatureChart';
-import CurrentHumidityChart from './CurrentHumidityChart';
-import CurrentRainChart from './CurrentRainChart';
-import CurrentPressureChart from './CurrentPressureChart';
-import CurrentWindSpeedChart from './CurrentWindSpeedChart';
+import ForecastTemperatureChart from './ForecastTemperatureChart';
+import ForecastHumidityChart from './ForecastHumidityChart';
+import ForecastRainChart from './ForecastRainChart';
+import ForecastPressureChart from './ForecastPressureChart';
+import ForecastWindSpeedChart from './ForecastWindSpeedChart';
+
+// import TodaysTemperatureChart from './TodaysTemperatureChart';
+// import TodaysHumidityChart from './TodaysHumidityChart';
+// import TodaysPressureChart from './TodaysPressureChart';
+// import TodaysRainChart from './TodaysRainChart';
+// import TodaysWindSpeedChart from './TodaysWindSpeedChart';
 
 const WeatherComponent = ({ lat, lon }) => {
   const [weatherData, setWeatherData] = useState(null);
@@ -72,6 +78,20 @@ const WeatherComponent = ({ lat, lon }) => {
     return weatherData;
   };
 
+  const filterTodaysData = (hourlyData) => {
+    const today = new Date();
+    const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+    const endOfDay = startOfDay + 24 * 60 * 60 * 1000;
+    return {
+      time: hourlyData.time.filter((t) => t.getTime() >= startOfDay && t.getTime() < endOfDay),
+      temperature2m: hourlyData.temperature2m.filter((_, i) => hourlyData.time[i].getTime() >= startOfDay && hourlyData.time[i].getTime() < endOfDay),
+      relativeHumidity2m: hourlyData.relativeHumidity2m.filter((_, i) => hourlyData.time[i].getTime() >= startOfDay && hourlyData.time[i].getTime() < endOfDay),
+      rain: hourlyData.rain.filter((_, i) => hourlyData.time[i].getTime() >= startOfDay && hourlyData.time[i].getTime() < endOfDay),
+      surfacePressure: hourlyData.surfacePressure.filter((_, i) => hourlyData.time[i].getTime() >= startOfDay && hourlyData.time[i].getTime() < endOfDay),
+      windSpeed10m: hourlyData.windSpeed10m.filter((_, i) => hourlyData.time[i].getTime() >= startOfDay && hourlyData.time[i].getTime() < endOfDay),
+    };
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -80,17 +100,30 @@ const WeatherComponent = ({ lat, lon }) => {
     return <div>Error: {error}</div>;
   }
 
+  const todaysData = weatherData ? filterTodaysData(weatherData.hourly) : null;
+
+
   return (
     <div>
       <h2>Forecast Weather Data (7 Days)</h2>
       {weatherData && (
         <div>
-          
-          <CurrentTemperatureChart data={weatherData.hourly} />
-          <CurrentHumidityChart data={weatherData.hourly} />
-          <CurrentRainChart data={weatherData.hourly} />
-          <CurrentPressureChart data={weatherData.hourly} />
-          <CurrentWindSpeedChart data={weatherData.hourly} />
+          <ForecastTemperatureChart data={weatherData.hourly} />
+          <ForecastHumidityChart data={weatherData.hourly} />
+          <ForecastRainChart data={weatherData.hourly} />
+          <ForecastPressureChart data={weatherData.hourly} />
+          <ForecastWindSpeedChart data={weatherData.hourly} />
+        </div>
+      )}
+
+    <h2>Today's Weather Data</h2>
+      {weatherData && (
+        <div>
+          <ForecastTemperatureChart data={todaysData} />
+          <ForecastHumidityChart data={todaysData} />
+          <ForecastRainChart data={todaysData} />
+          <ForecastPressureChart data={todaysData} />
+          <ForecastWindSpeedChart data={todaysData} />
         </div>
       )}
     </div>
