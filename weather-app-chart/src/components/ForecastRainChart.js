@@ -31,7 +31,7 @@ const ForecastRainChart = ({ data }) => {
         label: 'Rain (mm)',
         data: data.rain,
         fill: false,
-        borderColor: 'rgba(54,162,235,1)',
+        borderColor: 'rgba(54,22,235,1)',
         tension: 0.1,
       },
     ],

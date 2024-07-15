@@ -31,7 +31,7 @@ const ForecastHumidityChart = ({ data }) => {
         label: 'Humidity (%)',
         data: data.relativeHumidity2m,
         fill: false,
-        borderColor: 'rgba(153,102,255,1)',
+        borderColor: 'rgba(153,22,255,1)',
         tension: 0.1,
       },
     ],

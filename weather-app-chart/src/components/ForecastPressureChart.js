@@ -31,7 +31,7 @@ const ForecastPressureChart = ({ data }) => {
         label: 'Pressure (hPa)',
         data: data.surfacePressure,
         fill: false,
-        borderColor: 'rgba(255,159,64,1)',
+        borderColor: 'rgba(55,145,124,1)',
         tension: 0.1,
       },
     ],

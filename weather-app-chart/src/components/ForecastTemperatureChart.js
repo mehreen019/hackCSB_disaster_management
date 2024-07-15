@@ -31,7 +31,7 @@ const ForecastTemperatureChart = ({ data }) => {
         label: 'Temperature (°C)',
         data: data.temperature2m, 
         fill: false,
-        borderColor: 'rgba(75,192,192,1)',
+        borderColor: 'rgba(175,22,92,1)',
         tension: 0.1,
       },
     ],

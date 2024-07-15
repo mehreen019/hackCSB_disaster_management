@@ -31,7 +31,7 @@ const ForecastWindSpeedChart = ({ data }) => {
         label: 'Wind Speed (m/s)',
         data: data.windSpeed10m,
         fill: false,
-        borderColor: 'rgba(255,99,132,1)',
+        borderColor: 'rgba(255,12,132,1)',
         tension: 0.1,
       },
     ],
