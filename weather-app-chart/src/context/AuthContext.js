@@ -13,6 +13,7 @@ import {
   export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [role, setRole] = useState('user');
   
     useEffect(() => {
       // Uncomment and implement if you have a checkAuthStatus function
@@ -31,9 +32,12 @@ import {
       const data = await loginadmin(email, password);
       console.log("here is the response from api-com : ", data)
       console.log('login admindata', data);
+      
+      if(data.role) setRole(role)
       if (data.name) {
-        setUser({ email: data.email, username: data.name });
+        setUser({ email: data.email, username: data.name });        
         setIsLoggedIn(true);
+        setRole(role)
       }
       else throw new Error(`${data}`); 
     }catch (error) {
@@ -45,9 +49,13 @@ import {
       try{
       const data = await signupadmin(name, email, password);
       if (data) {
+        console.log('whole data obj : ', data);
         console.log(data.email);
         setUser({ email: data.email, username: data.name });
         setIsLoggedIn(true);
+        setRole(data.role);
+        console.log('adm role', data.role);
+     
       }
     }catch (error) {
       console.error("Failed to signup admin:", error);
@@ -58,8 +66,12 @@ import {
       try{
       const data = await loginauthority(email, password);
       if (data) {
+        
         setUser({ email: data.email, username: data.name });
         setIsLoggedIn(true);
+        setRole(data.role);
+        console.log('role is: ', data.role);
+
       }
       }catch (error) {
         console.error("Failed to login admin:", error);
@@ -72,6 +84,8 @@ import {
       if (data) {
         setUser({ email: data.email, username: data.name });
         setIsLoggedIn(true);
+        setRole(data.role);
+        console.log('role is: ', data.role);
       }
       }
       catch (error) {
@@ -90,6 +104,7 @@ import {
   
     const value = {
       user,
+      role,
       isLoggedIn,
       loginAdmin,
       signupAdmin,

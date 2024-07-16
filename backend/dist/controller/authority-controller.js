@@ -78,7 +78,7 @@ export const authorityLogin = async (req, res, next) => {
             httpOnly: true,
             signed: true,
         });
-        return res.status(200).json({ message: "OK", name: authority.username, email: authority.email });
+        return res.status(200).json({ message: "OK", name: authority.username, email: authority.email, role: authority.role });
     }
     catch (error) {
         console.log(error);

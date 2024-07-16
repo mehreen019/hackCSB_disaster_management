@@ -5,6 +5,7 @@ import loader from './GoogleMapsLoader';
 import { storeShelterLocations, getShelterLocations } from '../helpers/api-comm';
 import WeatherComponent from './CoordinateWeather';
 import { alignProperty } from '@mui/material/styles/cssUtils';
+import { useAuth } from '../context/AuthContext';
 const mapContainerStyle = {
   width: '70vw',
   height: '70vh',
@@ -37,6 +38,11 @@ const MapWithClickableCustomMarkers = () => {
   const [duration, setDuration] = useState(null);
   const [nearestCalc, setNearestCalc] = useState(false);
 
+  const auth = useAuth();
+  const role = auth.role;
+  console.log('at the begin;;', role);
+
+
   const handleLocationError = (browserHasGeolocation, infoWindow, pos, map) => {
     infoWindow.setPosition(pos);
     infoWindow.setContent(
@@ -68,6 +74,10 @@ const MapWithClickableCustomMarkers = () => {
 
 
   useEffect(() => {
+  
+   // setRole(auth.role);
+
+    console.log('auth role is: ',auth.role);
     loader.load().then(() => {
       if (!window.google?.maps) {
         console.error('Google Maps API is not available.');
@@ -82,8 +92,9 @@ const MapWithClickableCustomMarkers = () => {
       const directionsRendererInstance = new window.google.maps.DirectionsRenderer();
       directionsRendererInstance.setMap(map);
       setDirectionsRenderer(directionsRendererInstance);
-
-      map.addListener('click', (event) => {
+      if(role === 'authority')
+      {
+        map.addListener('click', (event) => {
         const clickedLocation = event.latLng;
         getPlaceName(clickedLocation.lat(), clickedLocation.lng(), (name) => {
           new window.google.maps.Marker({
@@ -103,6 +114,7 @@ const MapWithClickableCustomMarkers = () => {
           toast.success('Successfully placed marker');
         });
       });
+    }
 
       const infoWindow = new window.google.maps.InfoWindow();
       const locationButton = document.createElement('button');
@@ -339,6 +351,7 @@ const MapWithClickableCustomMarkers = () => {
 
   return (
     <div>
+      
       { nearestCalc?( <>
         <div id="map" style={mapContainerStyle}></div>
         <h3> Distance: {distance}     Duration: {duration} </h3>
@@ -348,9 +361,9 @@ const MapWithClickableCustomMarkers = () => {
         <button type="button" onClick={handleGet}>
           Get all locations
         </button>
-        <button type="button" onClick={handleSave}>
+        {role === 'authority' && (  <> <button type="button" onClick={handleSave}>
           Save all shelters
-        </button>
+        </button>  </>)}
         <button type="button" onClick={getDisasterPredictions}>
           Get earthquake predictions
         </button>
@@ -365,9 +378,9 @@ const MapWithClickableCustomMarkers = () => {
         <button type="button" onClick={handleGet}>
           Get all locations
         </button>
-        <button type="button" onClick={handleSave}>
+        {role === 'authority' && (  <> <button type="button" onClick={handleSave}>
           Save all shelters
-        </button>
+        </button>  </>)}
         <button type="button" onClick={getDisasterPredictions}>
           Get earthquake predictions
         </button>

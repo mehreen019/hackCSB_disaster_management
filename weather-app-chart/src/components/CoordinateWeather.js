@@ -17,6 +17,8 @@ const WeatherComponent = ({ lat, lon }) => {
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('today');
+
 
   useEffect(() => {
     const fetchWeatherData = async () => {
@@ -106,8 +108,65 @@ const WeatherComponent = ({ lat, lon }) => {
 
   return (
     <div>
+
+      <div className="tab-buttons">
+        <button onClick={() => setActiveTab('today')}>Today's Weather Data</button>
+        <button onClick={() => setActiveTab('forecast')}>Forecast Weather Data (7 Days)</button>
+      </div>
+
+      {activeTab === 'today' && (
+        <div>
+          <h2>Today's Weather Data</h2>
+          {weatherData && (
+            <div className="tgrid-container">
+              <div className="tchart-container">
+                <ForecastTemperatureChart data={todaysData} />
+              </div>
+              <div className="tchart-container">
+                <ForecastHumidityChart data={todaysData} />
+              </div>
+              <div className="tchart-container">
+                <ForecastRainChart data={todaysData} />
+              </div>
+              <div className="tchart-container">
+                <ForecastPressureChart data={todaysData} />
+              </div>
+              <div className="tchart-container">
+                <ForecastWindSpeedChart data={todaysData} />
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeTab === 'forecast' && (
+        <div style={{
+          alignContent: "center",
+        }}>
+          <h2>Forecast Weather Data (7 Days)</h2>
+          {weatherData && (
+            <div className="grid-container">
+              <div className="chart-container">
+                <ForecastTemperatureChart data={weatherData.hourly} />
+              </div>
+              <div className="chart-container">
+                <ForecastHumidityChart data={weatherData.hourly} />
+              </div>
+              <div className="chart-container">
+                <ForecastRainChart data={weatherData.hourly} />
+              </div>
+              <div className="chart-container">
+                <ForecastPressureChart data={weatherData.hourly} />
+              </div>
+              <div className="chart-container">
+                <ForecastWindSpeedChart data={weatherData.hourly} />
+              </div>
+            </div>
+          )}
+        </div>
+      )}
      
-    <h2>Today's Weather Data</h2>
+    {/* <h2>Today's Weather Data</h2>
       {weatherData && (
         <div className="tgrid-container">
           <div className="tchart-container"><ForecastTemperatureChart data={todaysData} /> </div>
@@ -127,7 +186,7 @@ const WeatherComponent = ({ lat, lon }) => {
           <div className="chart-container"><ForecastPressureChart data={weatherData.hourly} /></div>
           <div className="chart-container"><ForecastWindSpeedChart data={weatherData.hourly} /></div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
