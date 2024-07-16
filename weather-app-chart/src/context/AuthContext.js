@@ -30,8 +30,8 @@ import {
       try{
       const data = await loginadmin(email, password);
       console.log("here is the response from api-com : ", data)
-     // console.log(data.response.status)
-      if (data) {
+      console.log('login admindata', data);
+      if (data.name) {
         setUser({ email: data.email, username: data.name });
         setIsLoggedIn(true);
       }
