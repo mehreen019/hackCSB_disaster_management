@@ -6,7 +6,8 @@ import {
     loginauthority,
     signupauthority,
     logoutUser, 
-    getUserByUserNmae,// Uncomment if you have a logout function
+    getUserByUsername,
+    addFriend,// Uncomment if you have a logout function
 } from "../helpers/api-comm";
   
   const AuthContext = createContext({});
@@ -14,7 +15,7 @@ import {
   export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const[currentDashboard,setCurrentDashboard]=useState("");
+    const[current,setCurrent]=useState(null);
     useEffect(() => {
       // Uncomment and implement if you have a checkAuthStatus function
       // async function checkStatus() {
@@ -33,7 +34,7 @@ import {
       console.log("here is the response from api-com : ", data)
      // console.log(data.response.status)
       if (data) {
-        setUser({ email: data.email, username: data.name });
+        setUser({ email: data.email, username: data.name , friends:data.friends});
         setIsLoggedIn(true);
       }
       else throw new Error(`${data}`); 
@@ -47,7 +48,7 @@ import {
       const data = await signupadmin(name, email, password);
       if (data) {
         console.log(data.email);
-        setUser({ email: data.email, username: data.name });
+        setUser({ email: data.email, username: data.name, friends:data.friends });
         setIsLoggedIn(true);
       }
     }catch (error) {
@@ -88,19 +89,40 @@ import {
       setUser(null);
     //  window.location.reload();
     };
-    const getuser = async(username)=>{
-      await getUserByUserNmae(username);
-      console.log("User Found");
-    }
+    const getuser = async (tempusername) => {
+      
+        const data = await getUserByUsername(tempusername); // Fixed typo
+        console.log("Here is the response from API:", data);
+        
+        if (data) {
+          setCurrent({ email: data.email, username: data.name });
+         // return data;
+        } else {
+          throw new Error("Invalid data received");
+        }
+      
+    };
+    const addfriend = async()=>
+    {
+      const data = await addFriend(user?.username,current?.username);
+      console.log("Here is the response from API:", data);
+      setUser(prevUser => ({
+        ...prevUser,
+        friends: [...prevUser.friends, current?.username]
+      }));
+    };
+    
     const value = {
       user,
+      current,
       isLoggedIn,
       loginAdmin,
       signupAdmin,
       loginAuthority,
       signupAuthority,
       logout,
-      getuser, // Uncomment if you have a logout function
+      getuser,
+      addfriend, // Uncomment if you have a logout function
     };
   
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

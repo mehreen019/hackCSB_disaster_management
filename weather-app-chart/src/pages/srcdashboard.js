@@ -9,9 +9,10 @@ import SearchIcon from '@mui/icons-material/Search';
 const SrcDashboard = () => {
   const auth = useAuth();
   const user = auth?.user;
+  const current = auth?.current;
   const navigate = useNavigate();
-
-  const [searchQuery, setSearchQuery] = useState('');
+  
+  //const [searchQuery, setSearchQuery] = useState('');
 
   const dummyData = [
     { id: 1, title: 'Data Point 1', description: 'Description for data point 1' },
@@ -24,26 +25,26 @@ const SrcDashboard = () => {
     { id: 2, name: 'Friend 2', profilePic: 'https://via.placeholder.com/40' },
     { id: 3, name: 'Friend 3', profilePic: 'https://via.placeholder.com/40' },
   ];
-
-  /*const handleSearch = async () => {
-    const tempUsername =  searchQuery.toLowerCase();
+  
+  const handleAddFriend = async () => {
+    //const tempUsername =  searchQuery.toLowerCase();
     try {
-      const res = await auth?.getuser(tempUsername);
-      console.log('Searching page = ', res);
-      navigate(`/profile/${tempUsername}`);
+      const res = await auth?.addfriend();
+      console.log('adding friend = ', res);
+     // navigate(`/profile/${tempUsername}`);
     } catch (error) {
       console.log(error);
      // toast.error("Search failed", { id: "login" });
     }
    
-  };*/
+  };
 
   return (
     <Box display="flex" height="100vh" bgcolor="#f0f4f8">
       {/* Profile Box */}
       <Box
         width={{ xs: '30%', sm: '25%', md: '20%' }}
-        bgcolor="grey"
+        bgcolor="pink"
         boxShadow="0px 4px 12px rgba(0, 0, 0, 0.1)"
         padding={4}
         display="flex"
@@ -51,10 +52,18 @@ const SrcDashboard = () => {
         alignItems="center"
         borderRadius="10px"
       >
-        <Avatar src={user?.profilePic} alt={auth.currentDashboard} sx={{ width: 100, height: 100, mb: 2 }} />
+        <Avatar src={current?.profilePic} alt={current?.username} sx={{ width: 100, height: 100, mb: 2 }} />
         <Typography variant="h6" fontWeight={600} color="#00796b" textAlign="center">
-          {auth.currentDashboard}
+          {current?.username}
         </Typography>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          sx={{ mt: 2 }} 
+          onClick={handleAddFriend}
+        >
+          Add Friend
+        </Button>
       </Box>
 
       {/* Dummy Data Box */}
@@ -69,7 +78,6 @@ const SrcDashboard = () => {
         borderRadius="10px"
         marginX={2}
       >
-
         {/* Dummy Data */}
         <Box>
           <Typography variant="h5" marginBottom={2}>

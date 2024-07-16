@@ -172,14 +172,31 @@ export const getShelterLocations = async () => {
     }
   };
 
-  export const getUserByUserNmae = async (username) => {
+  export const getUserByUsername = async (username) => {
     Role = 'admin';
     try {
       console.log('Searching user with  username:', username);
   
       const res = await axios.post("http://localhost:5000/api/admin_user/username", { username });
   
-      console.log('Response received---:', res);
+      console.log('Response received---:', res.data);
+      return res.data;
+  
+    } catch (error) {
+      console.log('An error occurred during the search process');
+      console.log('recieved -- error : ', error)
+      return error.response.status;
+      
+    }
+  };
+  export const addFriend = async (username,friendUsername) => {
+    Role = 'admin';
+    try {
+      console.log('Searching user with  username:', friendUsername);
+  
+      const res = await axios.post("http://localhost:5000/api/admin_user/addfriend", { username , friendUsername});
+  
+      console.log('Response received---:', res.data);
       return res.data;
   
     } catch (error) {

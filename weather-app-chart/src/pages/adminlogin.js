@@ -10,7 +10,7 @@ import LandingPage from "./LandingPage";
 const AdminLogin = () => {
   const navigate = useNavigate();
   const auth = useAuth();
-
+  const user = auth?.user;
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -19,7 +19,7 @@ const AdminLogin = () => {
     try {
       toast.loading("Signing In", { id: "login" });
       const res = await auth?.loginAdmin(email, password);
-      console.log('from login page = ', res);
+     // console.log('from login page = ', user.username);
       toast.success("Logged In Successfully", { id: "login" });
     } catch (error) {
       console.log(error);

@@ -5,6 +5,7 @@ const adminSchema = new Schema({
     password: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     role: { type: String, default: 'admin' },
+    friends: { type: [String], default: [] },
     // permissions: { type: [String], default: ['manage_users', 'manage_disasters', 'view_reports'] }
 });
 export const Admin = model('Admin', adminSchema);

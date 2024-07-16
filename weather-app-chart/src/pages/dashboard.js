@@ -10,7 +10,9 @@ const Dashboard = () => {
   const auth = useAuth();
   const user = auth?.user;
   const navigate = useNavigate();
-
+  const current=auth?.current;
+  const friends = user.friends;
+  
   const [searchQuery, setSearchQuery] = useState('');
 
   const dummyData = [
@@ -19,24 +21,31 @@ const Dashboard = () => {
     { id: 3, title: 'Data Point 3', description: 'Description for data point 3' },
   ];
 
-  const friends = [
-    { id: 1, name: 'Friend 1', profilePic: 'https://via.placeholder.com/40' },
-    { id: 2, name: 'Friend 2', profilePic: 'https://via.placeholder.com/40' },
-    { id: 3, name: 'Friend 3', profilePic: 'https://via.placeholder.com/40' },
-  ];
+  
 
   const handleSearch = async () => {
     const tempUsername =  searchQuery.toLowerCase();
     try {
       const res = await auth?.getuser(tempUsername);
-      console.log('Searching page = ', res);
-      auth.currentDashboard = tempUsername;
+      //console.log('Searching page = ', currentDashboard?.username);
+      
       navigate(`/difprofile/${tempUsername}`);
     } catch (error) {
       console.log(error);
      // toast.error("Search failed", { id: "login" });
     }
    
+  };
+  const handleNavLinkClick =async (username) => {
+    try {
+      const res = await auth?.getuser(username);
+      //console.log('Searching page = ', currentDashboard?.username);
+      
+      navigate(`/difprofile/${username}`);
+    } catch (error) {
+      console.log(error);
+     // toast.error("Search failed", { id: "login" });
+    }
   };
 
   return (
@@ -119,39 +128,46 @@ const Dashboard = () => {
 
       {/* Friends Box */}
       <Box
-        width={{ xs: '30%', sm: '25%', md: '20%' }}
-        bgcolor="#f9f9f9"
-        boxShadow="0px 4px 12px rgba(0, 0, 0, 0.1)"
-        padding={4}
-        display="flex"
-        flexDirection="column"
-        borderRadius="10px"
-        maxHeight="80vh"
-        overflowY="auto"
-      >
-        <Typography variant="h5" marginBottom={2} color="#00796b">
-          Friends
-        </Typography>
-        <List>
-          {friends.map((friend) => (
-            <React.Fragment key={friend.id}>
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar src={friend.profilePic} alt={friend.name} />
-                </ListItemAvatar>
-                <ListItemText
-                  primary={
-                    <NavLink to={`/profile/${friend.id}`} style={{ textDecoration: 'none', color: '#004d40' }}>
-                      {friend.name}
-                    </NavLink>
-                  }
-                />
-              </ListItem>
-              <Divider variant="inset" component="li" />
-            </React.Fragment>
-          ))}
-        </List>
-      </Box>
+  width={{ xs: '30%', sm: '25%', md: '20%' }}
+  bgcolor="white"
+  boxShadow="10px 10px 20px #000"
+  padding={4}
+  display="flex"
+  flexDirection="column"
+  borderRadius="10px"
+  sx={{ maxHeight: '60vh', overflowY: 'auto' }} // Use sx prop for styling
+>
+  <Typography variant="h5" marginBottom={2}>
+    Friends
+  </Typography>
+  <List>
+    {friends.map((username) => (
+      <React.Fragment key={username}>
+        <ListItem>
+          <ListItemAvatar>
+            <Avatar>
+              {username.charAt(0).toUpperCase()} {/* Display the first letter of the username */}
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primary={
+              <NavLink
+                    to={`/difprofile/${username}`}
+                    style={{ textDecoration: 'none', color: '#00796b' }}
+                    onClick={() => handleNavLinkClick(username)}
+                  >
+                    {username}
+                  </NavLink>
+            }
+          />
+        </ListItem>
+        <Divider variant="inset" component="li" />
+      </React.Fragment>
+    ))}
+  </List>
+</Box>
+
+
     </Box>
   );
 };
