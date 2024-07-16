@@ -66,14 +66,14 @@ const Header = () => {
                   <NavigationLink to="/admin_user/login" text="Admin Login" />
                 </MenuItem>
                 <MenuItem onClick={handleLoginClose}>
-                  <NavigationLink to="/admin_user/login" text="Authority Login" />
+                  <NavigationLink to="/authority_user/login" text="Authority Login" />
                 </MenuItem>
               </Menu>
               <Button
                 onClick={handleSignupClick}
                 sx={{ bgcolor: "#51538f", color: "white" }}
               >
-              Signup
+                Signup
               </Button>
               <Menu
                 anchorEl={signupAnchorEl}
@@ -81,7 +81,7 @@ const Header = () => {
                 onClose={handleSignupClose}
               >
                 <MenuItem onClick={handleSignupClose}>
-                  <NavigationLink to="/admin_user/signup" text="User Signup" />
+                  <NavigationLink to="/admin_user/signup" text="Admin Signup" />
                 </MenuItem>
                 <MenuItem onClick={handleSignupClose}>
                   <NavigationLink to="/authority_user/signup" text="Authority Signup" />

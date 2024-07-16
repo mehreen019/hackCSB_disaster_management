@@ -129,45 +129,50 @@ export const getShelterLocations = async () => {
    };
    
    export const signupauthority = async (
-     name,
-     email,
-     password
-   ) => {
-     console.log("reached api")
-     const res = await axios.post("http://localhost:5000/api/authority_user/signup", { name, email, password });
-     if (res.status !== 200) {
-      throw new Error("Unable to Signup");
-     }
-     const data = await res.data;
-     Role = "authority";
-     
-     return data;
-   };
+    username,
+    email,
+    password
+  ) => {
+      console.log(username);
+    const res = await axios.post("http://localhost:5000/api/authority_user/signup", { username, email, password });
+    console.log(res)
+ 
+    if (res.status !== 200) {
+      throw new Error("Unable to Signup ");
+    }
+    const data = await res.data;
+    console.log(data.email);
+    Role = "authority";
+    return data;
+  };
+ 
 
 
 
    export const logoutUser = async () => {
   
+    console.log(Role);
+
     if(Role==="admin"){  
+          console.log(Role);
+        const res = await axios.get("http://localhost:5000/api/admin_user/logout");
+        if (res.status !== 200) {
+          throw new Error("Unable to delete chats");
+        }
+        const data = await res.data;
+        Role = "";
+      //toast.success("Logged out Successfully", { id: "login" });
+        return data;
+  }
+    if(Role==="authority"){  
       console.log(Role);
-     const res = await axios.get("http://localhost:5000/api/admin_user/logout");
+    const res = await axios.get("http://localhost:5000/api/authority_user/logout");
     if (res.status !== 200) {
       throw new Error("Unable to delete chats");
     }
     const data = await res.data;
     Role = "";
-   //toast.success("Logged out Successfully", { id: "login" });
-    return data;}
-    else if(Role==="authority")
-    {
-      const res = await axios.get("http://localhost:5000/api/authority_user/logout");
-    if (res.status !== 200) {
-      throw new Error("Unable to delete chats");
-    }
-  
-    const data = await res.data;
-    Role = "";
-    //toast.success("Logged out Successfully", { id: "login" });
+  //toast.success("Logged out Successfully", { id: "login" });
     return data;
-    }
+  }
   };
