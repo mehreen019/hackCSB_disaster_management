@@ -16,7 +16,7 @@ import Dashboard from './pages/dashboard'; // Import the Dashboard component
 function App() {
     return (
         <main>
-            <LandingPage/>
+            {/* <LandingPage/> */}
             <Header/>
             <Routes>
                 <Route path="/" element={<LandingPage />} />

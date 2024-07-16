@@ -4,10 +4,12 @@ import useGoogleMaps from './hooks/useMap';
 import loader from './GoogleMapsLoader'; 
 import { storeShelterLocations, getShelterLocations } from '../helpers/api-comm';
 import WeatherComponent from './CoordinateWeather';
+import { alignProperty } from '@mui/material/styles/cssUtils';
 const mapContainerStyle = {
   width: '70vw',
   height: '70vh',
-  margin: '50px',
+  margin: '50px auto',
+  alignProperty: 'center',
 };
 
 const center = {

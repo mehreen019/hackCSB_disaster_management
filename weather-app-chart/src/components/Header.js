@@ -43,6 +43,7 @@ const Header = () => {
             to={`/profile/${auth.user.username}`}  // Include the username in the route
             text="Profile"
           />
+           <NavigationLink bg="#00fffc" to="/home" text="Home" textColor="black"/>
             </>
           ) : (
             <>
