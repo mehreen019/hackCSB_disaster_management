@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from "react-router-dom";
 import SearchIcon from '@mui/icons-material/Search';
 
-const Dashboard = () => {
+const SrcDashboard = () => {
   const auth = useAuth();
   const user = auth?.user;
   const navigate = useNavigate();
@@ -25,19 +25,18 @@ const Dashboard = () => {
     { id: 3, name: 'Friend 3', profilePic: 'https://via.placeholder.com/40' },
   ];
 
-  const handleSearch = async () => {
+  /*const handleSearch = async () => {
     const tempUsername =  searchQuery.toLowerCase();
     try {
       const res = await auth?.getuser(tempUsername);
       console.log('Searching page = ', res);
-      auth.currentDashboard = tempUsername;
-      navigate(`/difprofile/${tempUsername}`);
+      navigate(`/profile/${tempUsername}`);
     } catch (error) {
       console.log(error);
      // toast.error("Search failed", { id: "login" });
     }
    
-  };
+  };*/
 
   return (
     <Box display="flex" height="100vh" bgcolor="#f0f4f8">
@@ -52,9 +51,9 @@ const Dashboard = () => {
         alignItems="center"
         borderRadius="10px"
       >
-        <Avatar src={user?.profilePic} alt={user?.username} sx={{ width: 100, height: 100, mb: 2 }} />
+        <Avatar src={user?.profilePic} alt={auth.currentDashboard} sx={{ width: 100, height: 100, mb: 2 }} />
         <Typography variant="h6" fontWeight={600} color="#00796b" textAlign="center">
-          {user?.username}
+          {auth.currentDashboard}
         </Typography>
       </Box>
 
@@ -70,38 +69,6 @@ const Dashboard = () => {
         borderRadius="10px"
         marginX={2}
       >
-        {/* Search Box */}
-        <Box display="flex" alignItems="center" marginBottom={4}>
-          <TextField
-            variant="outlined"
-            placeholder="Search users..."
-            fullWidth
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            sx={{ marginRight: 2 }}
-            InputProps={{
-              style: {
-                color: '#004d40',
-                backgroundColor: '#e0f7fa',
-                borderRadius: '4px',
-              },
-            }}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSearch}
-            startIcon={<SearchIcon />}
-            sx={{
-              backgroundColor: '#00796b',
-              ':hover': {
-                backgroundColor: '#004d40',
-              },
-            }}
-          >
-            Search
-          </Button>
-        </Box>
 
         {/* Dummy Data */}
         <Box>
@@ -116,44 +83,8 @@ const Dashboard = () => {
           ))}
         </Box>
       </Box>
-
-      {/* Friends Box */}
-      <Box
-        width={{ xs: '30%', sm: '25%', md: '20%' }}
-        bgcolor="#f9f9f9"
-        boxShadow="0px 4px 12px rgba(0, 0, 0, 0.1)"
-        padding={4}
-        display="flex"
-        flexDirection="column"
-        borderRadius="10px"
-        maxHeight="80vh"
-        overflowY="auto"
-      >
-        <Typography variant="h5" marginBottom={2} color="#00796b">
-          Friends
-        </Typography>
-        <List>
-          {friends.map((friend) => (
-            <React.Fragment key={friend.id}>
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar src={friend.profilePic} alt={friend.name} />
-                </ListItemAvatar>
-                <ListItemText
-                  primary={
-                    <NavLink to={`/profile/${friend.id}`} style={{ textDecoration: 'none', color: '#004d40' }}>
-                      {friend.name}
-                    </NavLink>
-                  }
-                />
-              </ListItem>
-              <Divider variant="inset" component="li" />
-            </React.Fragment>
-          ))}
-        </List>
-      </Box>
     </Box>
   );
 };
 
-export default Dashboard;
+export default SrcDashboard;

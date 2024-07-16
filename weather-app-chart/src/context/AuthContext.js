@@ -5,7 +5,8 @@ import {
     signupadmin,
     loginauthority,
     signupauthority,
-    logoutUser, // Uncomment if you have a logout function
+    logoutUser, 
+    getUserByUserNmae,// Uncomment if you have a logout function
 } from "../helpers/api-comm";
   
   const AuthContext = createContext({});
@@ -13,7 +14,7 @@ import {
   export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
+    const[currentDashboard,setCurrentDashboard]=useState("");
     useEffect(() => {
       // Uncomment and implement if you have a checkAuthStatus function
       // async function checkStatus() {
@@ -87,7 +88,10 @@ import {
       setUser(null);
     //  window.location.reload();
     };
-  
+    const getuser = async(username)=>{
+      await getUserByUserNmae(username);
+      console.log("User Found");
+    }
     const value = {
       user,
       isLoggedIn,
@@ -95,7 +99,8 @@ import {
       signupAdmin,
       loginAuthority,
       signupAuthority,
-      logout, // Uncomment if you have a logout function
+      logout,
+      getuser, // Uncomment if you have a logout function
     };
   
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

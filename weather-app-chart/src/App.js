@@ -12,6 +12,7 @@ import AdminSignup from "./pages/adminsignup";
 import NotFound from "./pages/NotFound";
 import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/dashboard'; // Import the Dashboard component
+import SrcDashboard from './pages/srcdashboard'; // Import the Dashboard component
 
 function App() {
     return (
@@ -26,6 +27,7 @@ function App() {
                 <Route path="/authority_user/login" element={<AuthorityLogin />} />
                 <Route path="/authority_user/signup" element={<AuthoritySignup/>} />
                 <Route path="/profile/:username" element={<Dashboard />} /> {/* Add the profile route */}
+                <Route path="/difprofile/:username" element={<SrcDashboard />} /> {/* Add the profile route */}
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </main>

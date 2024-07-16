@@ -171,3 +171,21 @@ export const getShelterLocations = async () => {
     return data;
     }
   };
+
+  export const getUserByUserNmae = async (username) => {
+    Role = 'admin';
+    try {
+      console.log('Searching user with  username:', username);
+  
+      const res = await axios.post("http://localhost:5000/api/admin_user/username", { username });
+  
+      console.log('Response received---:', res);
+      return res.data;
+  
+    } catch (error) {
+      console.log('An error occurred during the search process');
+      console.log('recieved -- error : ', error)
+      return error.response.status;
+      
+    }
+  };
