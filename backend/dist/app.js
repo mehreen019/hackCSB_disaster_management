@@ -4,7 +4,6 @@ import appRouter from "./routes/index.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import axios from "axios";
-
 const app = express();
 const PORT = 5000;
 app.use(cors());
@@ -42,6 +41,5 @@ app.get('/api/point', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
 export default app;
 //# sourceMappingURL=app.js.map
