@@ -37,7 +37,14 @@ const Header = () => {
           {auth?.isLoggedIn ? (
             <>
               <NavigationLink bg="#00fffc" to="/" text="Logout" textColor="black" onClick={auth.logout}  />
-              <NavigationLink bg="#51538f" textColor="white" to="/" text="Profile" />
+              <NavigationLink
+            bg="#51538f"
+            textColor="white"
+            to={`/profile/${auth.user.username}`}  // Include the username in the route
+            text="Profile"
+          />
+           <NavigationLink bg="#51538f"
+            textColor="white" to="/home" text="Home" />
             </>
           ) : (
             <>
