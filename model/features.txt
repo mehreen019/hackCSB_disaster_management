@@ -1,0 +1,6 @@
+Index(['soil_moisture_100_to_255cm_0', 'soil_temperature_100_to_255cm_0',
+       'soil_moisture_28_to_100cm_0', 'soil_temperature_28_to_100cm_0',
+       'dew_point_2m_0', 'soil_moisture_0_to_7cm_0', 'apparent_temperature_0',
+       'et0_fao_evapotranspiration_18', 'temperature_2m_min',
+       'wind_speed_10m_max', 'wind_direction_100m_0', 'wind_direction_10m_22'],
+      dtype='object')
