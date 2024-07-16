@@ -361,9 +361,9 @@ const MapWithClickableCustomMarkers = () => {
         <button type="button" onClick={handleGet}>
           Get all locations
         </button>
-        {role === 'authority' && (<button type="button" onClick={handleSave}>
+        {role === 'authority' && (  <> <button type="button" onClick={handleSave}>
           Save all shelters
-        </button>)}
+        </button>  </>)}
         <button type="button" onClick={getDisasterPredictions}>
           Get earthquake predictions
         </button>
@@ -378,9 +378,9 @@ const MapWithClickableCustomMarkers = () => {
         <button type="button" onClick={handleGet}>
           Get all locations
         </button>
-        {role === 'authority' && (<button type="button" onClick={handleSave}>
+        {role === 'authority' && (  <> <button type="button" onClick={handleSave}>
           Save all shelters
-        </button>)}
+        </button>  </>)}
         <button type="button" onClick={getDisasterPredictions}>
           Get earthquake predictions
         </button>

@@ -13,7 +13,7 @@ import {
   export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [role, setRole] = useState(null);
+    const [role, setRole] = useState('user');
   
     useEffect(() => {
       // Uncomment and implement if you have a checkAuthStatus function
@@ -37,6 +37,7 @@ import {
       if (data.name) {
         setUser({ email: data.email, username: data.name });        
         setIsLoggedIn(true);
+        setRole(role)
       }
       else throw new Error(`${data}`); 
     }catch (error) {
