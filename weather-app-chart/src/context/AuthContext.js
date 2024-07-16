@@ -31,7 +31,7 @@ import {
       const data = await loginadmin(email, password);
       console.log("here is the response from api-com : ", data)
      // console.log(data.response.status)
-      if (data === 200) {
+      if (data) {
         setUser({ email: data.email, username: data.name });
         setIsLoggedIn(true);
       }

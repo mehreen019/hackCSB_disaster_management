@@ -56,7 +56,7 @@ export const getShelterLocations = async () => {
     const res = await axios.post("http://localhost:5000/api/admin_user/login", { email, password });
 
     console.log('Response received---:', res);
-    return res.status;
+    return res.data;
 
     // // Check if the response status is not 200
     // if (res.status !== 200) {
