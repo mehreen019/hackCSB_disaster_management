@@ -30,7 +30,7 @@ export const adminSignup = async (req:Request,res:Response,next:NextFunction) =>
                 username: username,
                 email: email,
                 password: hashedPassword,
-                role: 'admin'
+                role: 'user'
               });
               await admin.save();
 
@@ -87,7 +87,7 @@ export const adminSignup = async (req:Request,res:Response,next:NextFunction) =>
             signed:true,
            });
           
-          return res.status(200).json({ message: "OK", name: admin.username, email: admin.email });
+          return res.status(200).json({ message: "OK", name: admin.username, email: admin.email, role:admin.role });
         } catch (error) {
           console.log(error);
           return res.status(200).json({ message: "ERROR", cause: error.message });

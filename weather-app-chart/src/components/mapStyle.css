@@ -1,8 +1,10 @@
-.grid-container {
+/* .grid-container {
+  justify-content: center;
+
     display: grid;
     grid-template-columns: repeat(1, 1fr);
     gap: 16px;
-  }
+  } */
 
 .tgrid-container {
     display: grid;
@@ -12,6 +14,8 @@
   
   
   .chart-container {
+    justify-content: center;
+    margin: 50px auto;
     min-width: 0; /* Ensures charts do not overflow */
     min-height: 200px; /* Sets a minimum height for each chart */
     max-height: 500px;
@@ -22,6 +26,7 @@
   .tchart-container {
     min-width: 0; /* Ensures charts do not overflow */
     min-height: 400px; /* Sets a minimum height for each chart */
+    
     padding: 16px; /* Adds some padding around each chart */
     box-sizing: border-box;
   }

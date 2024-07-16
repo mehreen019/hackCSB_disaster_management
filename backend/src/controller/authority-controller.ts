@@ -92,7 +92,7 @@ export const authorityLogin = async (
             signed:true,
            });
           
-          return res.status(200).json({ message: "OK", name: authority.username, email: authority.email });
+          return res.status(200).json({ message: "OK", name: authority.username, email: authority.email, role : authority.role });
         } catch (error) {
           console.log(error);
           return res.status(200).json({ message: "ERROR", cause: error.message });
