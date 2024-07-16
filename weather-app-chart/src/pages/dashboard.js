@@ -2,10 +2,20 @@ import React from 'react';
 import { Box, Typography, Avatar, TextField, List, ListItem, ListItemAvatar, ListItemText, Divider } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const Dashboard = () => {
   const auth = useAuth();
   const user = auth?.user;
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (auth?.user) {
+      navigate("/profile/:user");
+    }
+    else navigate("/");
+  }, [auth, navigate]);
 
   const dummyData = [
     { id: 1, title: 'Data Point 1', description: 'Description for data point 1' },
