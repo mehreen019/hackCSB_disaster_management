@@ -60,6 +60,9 @@ const Header = () => {
                 onClose={handleLoginClose}
               >
                 <MenuItem onClick={handleLoginClose}>
+                  <NavigationLink to="/admin_user/login" text="User Login" />
+                </MenuItem>
+                <MenuItem onClick={handleLoginClose}>
                   <NavigationLink to="/admin_user/login" text="Admin Login" />
                 </MenuItem>
                 <MenuItem onClick={handleLoginClose}>
