@@ -66,6 +66,7 @@ const MapWithClickableCustomMarkers = () => {
     });
   };
 
+
   useEffect(() => {
     loader.load().then(() => {
       if (!window.google?.maps) {
@@ -109,6 +110,59 @@ const MapWithClickableCustomMarkers = () => {
       locationButton.textContent = 'Pan to Current Location';
       locationButton.classList.add('custom-map-control-button');
       map.controls[window.google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+
+
+      const getCurrentLocationAtLoad = () => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+              };
+
+              setCurrentLocation(pos);
+              infoWindow.setPosition(pos);
+              infoWindow.setContent('Location found.');
+              infoWindow.open(map);
+              map.setCenter(pos);
+              console.log( position.coords.accuracy )
+            },
+            /*async () => {
+              const response = await fetch('https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyDF2rKGbY2nhUoe1rKcI3DhUKM_HZu2oUY', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json'
+                      },
+                    body: JSON.stringify({ considerIp: true })
+                  });
+              const data = await response.json();
+
+              console.log(data)
+
+              const pos = {
+                lat: data.location.lat,
+                lng: data.location.lng,
+              };
+
+              setCurrentLocation(pos);
+              infoWindow.setPosition(pos);
+              infoWindow.setContent('Location found.');
+              infoWindow.open(map);
+              map.setCenter(pos);
+
+            },*/
+            () => {
+              handleLocationError(true, infoWindow, map.getCenter(), map);
+            },{
+              enableHighAccuracy: true,
+            }
+          );
+        } else {
+          handleLocationError(false, infoWindow, map.getCenter(), map);
+        }
+      }
+      getCurrentLocationAtLoad();
 
       locationButton.addEventListener('click', 
         () => {
@@ -317,11 +371,12 @@ const MapWithClickableCustomMarkers = () => {
         <button type="button" onClick={getDisasterPredictions}>
           Get earthquake predictions
         </button>
-        {currentLocation && (
-        <WeatherComponent lat={currentLocation.lat} lon={currentLocation.lng} />
-      )}
+     
         </>
       )}
+         {currentLocation && (
+        <WeatherComponent lat={currentLocation.lat} lon={currentLocation.lng} />
+        )}
     </div>
   );
 };
