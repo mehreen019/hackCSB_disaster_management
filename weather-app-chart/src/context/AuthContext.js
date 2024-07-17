@@ -13,7 +13,7 @@ import {
   export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [role, setRole] = useState('user');
+    const [role, setRole] = useState('default');
   
     useEffect(() => {
       // Uncomment and implement if you have a checkAuthStatus function
@@ -25,42 +25,45 @@ import {
       //   }
       // }
       // checkStatus();
+
     }, []);
   
-    const loginAdmin = async (email, password) => {
-      try{
+ const loginAdmin = async (email, password) => {
+    try {
       const data = await loginadmin(email, password);
-      console.log("here is the response from api-com : ", data)
-      console.log('login admindata', data);
+      console.log("here is the response from api-comm: ", data);
+      console.log('login admin data', data);
+      console.log('login role data', data.role);
       
-      if(data.role) setRole(role)
       if (data.name) {
         setUser({ email: data.email, username: data.name });        
         setIsLoggedIn(true);
-        setRole(role)
+        setRole(data.role);
+        console.log('state role:', data.role);
+      } else {
+        throw new Error(data);
       }
-      else throw new Error(`${data}`); 
-    }catch (error) {
+    } catch (error) {
       console.error("Failed to login admin:", error);
     }
-    };
+  };
+
   
-    const signupAdmin = async (name, email, password) => {
-      try{
+  const signupAdmin = async (name, email, password) => {
+    try {
       const data = await signupadmin(name, email, password);
       if (data) {
-        console.log('whole data obj : ', data);
+        console.log('whole data obj: ', data);
         console.log(data.email);
         setUser({ email: data.email, username: data.name });
         setIsLoggedIn(true);
         setRole(data.role);
-        console.log('adm role', data.role);
-     
+        console.log('admin role', data.role);
       }
-    }catch (error) {
+    } catch (error) {
       console.error("Failed to signup admin:", error);
     }
-    };
+  };
   
     const loginAuthority = async (email, password) => {
       try{
