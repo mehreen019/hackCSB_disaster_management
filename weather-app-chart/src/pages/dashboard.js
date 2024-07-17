@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from "react-router-dom";
 import SearchIcon from '@mui/icons-material/Search';
+import { useEffect } from "react";
 
 const Dashboard = () => {
   const auth = useAuth();
@@ -14,6 +15,14 @@ const Dashboard = () => {
   const friends = user.friends;
   
   const [searchQuery, setSearchQuery] = useState('');
+
+  
+  useEffect(() => {
+    if (auth?.user) {
+      navigate("/profile/:user");
+    }
+    else navigate("/");
+  }, [auth, navigate]);
 
   const dummyData = [
     { id: 1, title: 'Data Point 1', description: 'Description for data point 1' },

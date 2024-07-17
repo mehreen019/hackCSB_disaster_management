@@ -51,6 +51,7 @@
   },
   "devDependencies": {
     "@types/google-map-react": "^2.1.10",
-    "react-notifications": "^1.7.4"
+    "react-notifications": "^1.7.4",
+    "@babel/plugin-proposal-private-property-in-object" : "7.21.11"
   }
 }

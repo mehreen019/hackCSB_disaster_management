@@ -16,6 +16,8 @@ import {
     const [user, setUser] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const[current,setCurrent]=useState(null);
+    const [role, setRole] = useState('default');
+  
     useEffect(() => {
       // Uncomment and implement if you have a checkAuthStatus function
       // async function checkStatus() {
@@ -26,42 +28,54 @@ import {
       //   }
       // }
       // checkStatus();
+
     }, []);
   
-    const loginAdmin = async (email, password) => {
-      try{
+ const loginAdmin = async (email, password) => {
+    try {
       const data = await loginadmin(email, password);
       console.log("here is the response from api-com : ", data)
      // console.log(data.response.status)
       if (data) {
         setUser({ email: data.email, username: data.name , friends:data.friends});
         setIsLoggedIn(true);
+        setRole(data.role);
+        console.log('state role:', data.role);
+      } else {
+        throw new Error(data);
       }
-      else throw new Error(`${data}`); 
-    }catch (error) {
+    } catch (error) {
       console.error("Failed to login admin:", error);
     }
-    };
+  };
+
   
-    const signupAdmin = async (name, email, password) => {
-      try{
+  const signupAdmin = async (name, email, password) => {
+    try {
       const data = await signupadmin(name, email, password);
       if (data) {
+        console.log('whole data obj: ', data);
         console.log(data.email);
         setUser({ email: data.email, username: data.name, friends:data.friends });
         setIsLoggedIn(true);
+        setRole(data.role);
+        console.log('admin role', data.role);
       }
-    }catch (error) {
+    } catch (error) {
       console.error("Failed to signup admin:", error);
     }
-    };
+  };
   
     const loginAuthority = async (email, password) => {
       try{
       const data = await loginauthority(email, password);
       if (data) {
+        
         setUser({ email: data.email, username: data.name });
         setIsLoggedIn(true);
+        setRole(data.role);
+        console.log('role is: ', data.role);
+
       }
       }catch (error) {
         console.error("Failed to login admin:", error);
@@ -74,6 +88,8 @@ import {
       if (data) {
         setUser({ email: data.email, username: data.name });
         setIsLoggedIn(true);
+        setRole(data.role);
+        console.log('role is: ', data.role);
       }
       }
       catch (error) {
@@ -115,6 +131,7 @@ import {
     const value = {
       user,
       current,
+      role,
       isLoggedIn,
       loginAdmin,
       signupAdmin,

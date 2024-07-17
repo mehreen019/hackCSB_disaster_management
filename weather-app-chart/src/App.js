@@ -17,7 +17,7 @@ import SrcDashboard from './pages/srcdashboard'; // Import the Dashboard compone
 function App() {
     return (
         <main>
-            <LandingPage/>
+            {/* <LandingPage/> */}
             <Header/>
             <Routes>
                 <Route path="/" element={<LandingPage />} />

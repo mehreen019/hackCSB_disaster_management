@@ -36,13 +36,15 @@ const Header = () => {
         <div>
           {auth?.isLoggedIn ? (
             <>
-              <NavigationLink bg="#00fffc" to="/" text="Logout" textColor="black" onClick={auth.logout}  />
+              <NavigationLink bg="#00fffc" to="/" text="Logout" textColor="black" onClick={auth.logout}/>
               <NavigationLink
             bg="#51538f"
             textColor="white"
             to={`/profile/${auth.user.username}`}  // Include the username in the route
             text="Profile"
           />
+           <NavigationLink bg="#51538f"
+            textColor="white" to="/home" text="Home" />
             </>
           ) : (
             <>
@@ -58,7 +60,10 @@ const Header = () => {
                 onClose={handleLoginClose}
               >
                 <MenuItem onClick={handleLoginClose}>
-                  <NavigationLink to="/admin_user/login" text="Admin Login" />
+                  <NavigationLink to="/admin_user/login" text="User Login" role ="User"/>
+                </MenuItem>
+                <MenuItem onClick={handleLoginClose}>
+                  <NavigationLink to="/admin_user/login" text="Admin Login" role = "Admin"/>
                 </MenuItem>
                 <MenuItem onClick={handleLoginClose}>
                   <NavigationLink to="/authority_user/login" text="Authority Login" />

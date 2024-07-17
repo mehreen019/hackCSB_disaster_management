@@ -39,7 +39,7 @@ export const adminSignup = async (req, res, next) => {
             username: username,
             email: email,
             password: hashedPassword,
-            role: 'admin'
+            role: 'user'
         });
         await admin.save();
         res.clearCookie(COOKIE_NAME, {
@@ -89,7 +89,7 @@ export const adminLogin = async (req, res, next) => {
             httpOnly: true,
             signed: true,
         });
-        return res.status(200).json({ message: "OK", name: admin.username, email: admin.email, friends: admin.friends });
+        return res.status(200).json({ message: "OK", name: admin.username, email: admin.email, friends: admin.friends,role:admin.role });
     }
     catch (error) {
         console.log(error);

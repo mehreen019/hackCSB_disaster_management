@@ -6,11 +6,19 @@ import { toast } from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import LandingPage from "./LandingPage";
+import { useLocation } from "react-router-dom";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
   const auth = useAuth();
   const user = auth?.user;
+  const location = useLocation();
+
+  const {role } = location.state;
+  console.log('Admin page er upore role using location is ', role);
+  const usableRole = role.role;
+  console.log('usable ,' ,usableRole);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -59,7 +67,7 @@ const AdminLogin = () => {
           fontWeight={600}
           color="#00796b"
         >
-          Admin Login
+          {usableRole} Login
         </Typography>
         <form onSubmit={handleSubmit}>
           <Box display="flex" flexDirection="column" gap={2}>
